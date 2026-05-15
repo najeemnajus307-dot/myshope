@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile | Faith &amp; Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ecebf4;--surface:#ecebf4;--lit:#ffffff;--shade:#b8b9c8;
+  --ink:#2a2c3e;--ink-soft:#6b6d82;--ink-mute:#9a9cb0;
+  --clay-peach:#ffc89a;--clay-yellow:#ffe08a;--clay-mint:#a8e6cf;
+  --clay-sky:#a8c8ff;--clay-lilac:#c5b3ff;--clay-rose:#ff9eb3;
+  --accent:#6c5ce7;--accent-soft:#b8aeff;
+  --streak:#ff7a3d;--gold:#f0b429;--silver:#b5becd;--bronze:#cd8a4a;
+  --r-lg:28px;--r-md:20px;--r-sm:14px;
+  --neu-out:14px 14px 30px var(--shade),-14px -14px 30px var(--lit);
+  --neu-out-sm:8px 8px 18px var(--shade),-8px -8px 18px var(--lit);
+  --neu-in:inset 8px 8px 18px var(--shade),inset -8px -8px 18px var(--lit);
+  --neu-in-sm:inset 4px 4px 10px var(--shade),inset -4px -4px 10px var(--lit);
+  --neu-press:inset 6px 6px 14px var(--shade),inset -6px -6px 14px var(--lit);
+  --clay-shadow:inset 0 -8px 0 rgba(60,30,80,.10),inset 0 8px 0 rgba(255,255,255,.65);
+  /* nav green tokens */
+  --green-deep:#0d4a28;--green-mid:#1c7a3e;--green-leaf:#72b534;
+  --green-wash:#dff0d0;--paper-mint:#dff0d6;--paper:#ffffff;
+  --paper-2:#f6faf4;--paper-3:#edf5e8;--line:#d6e5d8;--ink-2:#2a3d30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);min-height:100vh}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:78px;-webkit-font-smoothing:antialiased}
+
+/* ── Nav ── */
+.app-nav{position:fixed;z-index:200;bottom:0;left:0;right:0;background:var(--surface);box-shadow:0 -6px 24px rgba(184,185,200,.55),0 -1px 0 rgba(255,255,255,.9);display:flex;padding:6px 8px max(8px,env(safe-area-inset-bottom))}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink-mute);gap:3px;padding:6px 4px 4px;border-radius:14px;transition:all .2s}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.nav-item span{font-size:10px;font-weight:600;letter-spacing:.3px}
+.nav-item.active{color:var(--green-mid);background:linear-gradient(160deg,rgba(114,181,52,.12),rgba(28,122,62,.08));box-shadow:var(--neu-in-sm)}
+.nav-item.active svg{transform:scale(1.15);stroke:var(--green-mid)}
+
+
+/* ── Top bar ── */
+.top-bar{background:var(--surface);padding:18px 22px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 rgba(0,0,0,.04),0 14px 30px -20px rgba(120,120,160,.25)}
+.top-bar-inner{flex:1}
+.top-bar-eyebrow{font-size:10px;letter-spacing:3px;color:var(--ink-mute);text-transform:uppercase;font-weight:700;margin-bottom:2px}
+.top-bar-title{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-0.5px;color:var(--ink)}
+.icon-btn{width:38px;height:38px;border-radius:14px;border:0;background:var(--surface);box-shadow:var(--neu-out-sm);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);text-decoration:none;transition:all .2s;flex-shrink:0;font-size:15px;font-family:monospace}
+.icon-btn:hover{color:var(--ink)}
+.icon-btn:active{box-shadow:var(--neu-press)}
+.edit-pill{display:inline-flex;align-items:center;gap:7px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:13px;padding:9px 16px;border-radius:999px;background:var(--surface);color:var(--ink);box-shadow:var(--neu-out-sm);transition:all .2s;flex-shrink:0}
+.edit-pill:hover{color:var(--accent)}
+.edit-pill:active{box-shadow:var(--neu-press)}
+
+/* ── Page ── */
+.page-body{padding:22px 22px 36px;max-width:1100px;margin:0 auto}
+.pf-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:860px){.pf-grid{grid-template-columns:1.35fr 1fr}}
+
+/* ── Hero ── */
+.pf-hero{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:26px;display:flex;align-items:center;gap:22px;position:relative;overflow:hidden;margin-bottom:20px}
+.pf-hero::before{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--clay-lilac),transparent 60%);opacity:.3;pointer-events:none}
+.pf-avatar{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;font-size:48px;box-shadow:var(--clay-shadow),10px 12px 24px rgba(60,30,140,.25);flex-shrink:0;position:relative;z-index:1;cursor:pointer;transition:transform .25s ease;user-select:none}
+.pf-avatar:hover{transform:scale(1.04) rotate(-3deg)}
+.pf-hero-body{min-width:0;flex:1;position:relative;z-index:1}
+.pf-name{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(24px,3.5vw,34px);letter-spacing:-0.5px;line-height:1.05}
+.pf-bio{color:var(--ink-soft);font-size:13px;margin-top:6px;line-height:1.5;max-width:360px}
+.pf-chips{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;position:relative;z-index:1}
+.pf-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;font-size:12px;font-weight:700;box-shadow:var(--clay-shadow),3px 4px 8px rgba(0,0,0,.08)}
+.pf-chip.member{background:linear-gradient(160deg,var(--clay-mint),#6cd0a1);color:#114c2c}
+.pf-chip.streak{background:linear-gradient(160deg,#fff4d6,#ffb37a);color:#8a3a00}
+.pf-chip.age{background:linear-gradient(160deg,var(--clay-sky),#8aafff);color:#1a2a6a}
+.pf-chip.since{background:linear-gradient(160deg,var(--clay-peach),#ffb37a);color:#6a2a00}
+@media(max-width:600px){
+  .pf-hero{flex-direction:column;text-align:center;padding:22px 18px}
+  .pf-avatar{width:84px;height:84px;font-size:38px}
+  .pf-chips{justify-content:center}
+}
+
+/* ── Stats grid ── */
+.pf-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:480px){.pf-stats{grid-template-columns:1fr 1fr}}
+.pf-stat{background:var(--surface);border-radius:var(--r-md);box-shadow:var(--neu-out-sm);padding:16px;position:relative;overflow:hidden;cursor:default;transition:transform .2s}
+.pf-stat:hover{transform:translateY(-2px)}
+.pf-stat-ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:17px;box-shadow:var(--clay-shadow),4px 5px 10px rgba(0,0,0,.10);margin-bottom:10px}
+.pf-stat-ico.c1{background:linear-gradient(160deg,var(--clay-mint),#6cd0a1)}
+.pf-stat-ico.c2{background:linear-gradient(160deg,var(--clay-peach),#ffa074)}
+.pf-stat-ico.c3{background:linear-gradient(160deg,var(--clay-sky),#8aafff)}
+.pf-stat-ico.c4{background:linear-gradient(160deg,var(--clay-yellow),#ffc24a)}
+.pf-stat-ico.c5{background:linear-gradient(160deg,var(--clay-rose),#ff5a7a)}
+.pf-stat-ico.c6{background:linear-gradient(160deg,var(--clay-lilac),#8a7aff)}
+.pf-stat-lbl{font-size:10px;letter-spacing:2px;color:var(--ink-mute);text-transform:uppercase;font-weight:700}
+.pf-stat-num{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(24px,3vw,30px);line-height:1;letter-spacing:-0.5px;margin:6px 0 3px}
+.pf-stat-sub{font-size:11px;color:var(--ink-soft)}
+.pf-stat-spark{height:36px;margin-top:10px;overflow:visible}
+.pf-stat-spark svg{width:100%;height:36px;overflow:visible}
+
+/* ── Card ── */
+.card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:22px;position:relative;overflow:hidden}
+.card-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.card-h{font-family:'Fraunces',serif;font-weight:700;font-size:20px;letter-spacing:-.4px;margin:0}
+.card-sub{color:var(--ink-soft);font-size:12px;margin-top:3px}
+.card-badge{font-size:10px;letter-spacing:2px;color:var(--ink-mute);text-transform:uppercase;font-weight:700}
+
+/* ── Week chart ── */
+.pf-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:14px}
+.pf-day{background:var(--surface);border-radius:var(--r-sm);box-shadow:var(--neu-in-sm);padding:10px 6px 12px;text-align:center;cursor:default;transition:all .2s}
+.pf-day:hover{box-shadow:var(--neu-out-sm);transform:translateY(-2px)}
+.pf-day.today{box-shadow:var(--neu-out-sm),inset 0 0 0 2px var(--accent-soft)}
+.pf-day-l{font-size:10px;color:var(--ink-mute);font-weight:700;letter-spacing:1px}
+.pf-day-bar-track{height:56px;border-radius:99px;margin:8px auto 6px;background:var(--surface);box-shadow:inset 2px 2px 5px var(--shade),inset -2px -2px 5px var(--lit);width:11px;position:relative}
+.pf-day-bar{position:absolute;bottom:2px;left:2px;right:2px;border-radius:99px;background:linear-gradient(180deg,var(--clay-lilac),var(--accent));box-shadow:var(--clay-shadow),0 2px 4px rgba(108,92,231,.35);transition:height .6s cubic-bezier(0.34,1.56,0.64,1)}
+.pf-day-v{font-weight:700;font-size:12px}
+.pf-week-foot{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft)}
+.pf-stat-mini{background:var(--surface);border-radius:var(--r-sm);box-shadow:var(--neu-in-sm);padding:10px 12px;text-align:center}
+.pf-stat-mini-v{font-family:'Fraunces',serif;font-weight:700;font-size:18px;letter-spacing:-.4px}
+.pf-stat-mini-l{font-size:10px;letter-spacing:1.5px;color:var(--ink-mute);text-transform:uppercase;margin-top:3px;font-weight:700}
+.pf-week-foot b{color:var(--ink);font-weight:700}
+
+/* ── Level/Tier card ── */
+.pf-tier{background:linear-gradient(160deg,var(--clay-lilac),var(--accent-soft));color:#2a1d6a;border-radius:var(--r-lg);padding:22px;box-shadow:var(--clay-shadow),12px 14px 30px rgba(108,92,231,.25);position:relative;overflow:hidden;margin-bottom:20px}
+.pf-tier::before{content:"";position:absolute;right:-30px;bottom:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.35),transparent 60%);pointer-events:none}
+.pf-tier-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.pf-tier-eye{font-size:10px;letter-spacing:2.5px;font-weight:700;opacity:.7;text-transform:uppercase}
+.pf-tier-h{font-family:'Fraunces',serif;font-size:26px;font-weight:700;letter-spacing:-.5px;margin:4px 0 0}
+.pf-tier-badge{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.4);backdrop-filter:blur(8px);display:grid;place-items:center;font-size:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 14px rgba(0,0,0,.12)}
+.pf-tier-bar{margin-top:18px;height:13px;border-radius:99px;background:rgba(255,255,255,.3);box-shadow:inset 2px 2px 4px rgba(40,20,80,.12);padding:3px;position:relative;z-index:1}
+.pf-tier-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#fff,var(--clay-yellow));box-shadow:0 2px 4px rgba(0,0,0,.12);width:0%;transition:width .8s cubic-bezier(0.34,1.56,0.64,1)}
+.pf-tier-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;font-weight:600;opacity:.8;position:relative;z-index:1}
+
+/* ── Activity ── */
+.pf-acts{display:flex;flex-direction:column;gap:8px}
+.pf-act{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center;padding:12px 14px;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--neu-out-sm);transition:all .2s}
+.pf-act:hover{transform:translateX(2px)}
+.pf-act-ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:18px;box-shadow:var(--clay-shadow),3px 4px 8px rgba(0,0,0,.10);flex-shrink:0}
+.pf-act-ico.session{background:linear-gradient(160deg,var(--clay-sky),#8aafff)}
+.pf-act-title{font-weight:700;font-size:13px;line-height:1.3}
+.pf-act-meta{color:var(--ink-mute);font-size:11px;margin-top:2px}
+.pf-acts-empty{padding:24px;text-align:center;color:var(--ink-mute);font-size:13px}
+
+/* ── Edit modal ── */
+.pf-modal-scrim{position:fixed;inset:0;z-index:50;background:rgba(30,30,60,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.pf-modal-scrim.open{opacity:1;pointer-events:auto}
+.pf-modal{background:var(--surface);border-radius:var(--r-lg);box-shadow:20px 20px 60px rgba(60,40,120,.3),-20px -20px 60px rgba(255,255,255,.6);width:100%;max-width:420px;padding:26px;position:relative;transform:translateY(20px) scale(.96);transition:transform .35s cubic-bezier(0.34,1.56,0.64,1);max-height:90vh;overflow-y:auto}
+.pf-modal-scrim.open .pf-modal{transform:translateY(0) scale(1)}
+.pf-modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:0;cursor:pointer;background:var(--surface);box-shadow:var(--neu-out-sm);display:grid;place-items:center;color:var(--ink-soft);transition:all .2s}
+.pf-modal-close:hover{color:var(--ink)}
+.pf-modal-close:active{box-shadow:var(--neu-press)}
+.pf-modal h3{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin:0 0 4px;letter-spacing:-.4px}
+.pf-modal p{color:var(--ink-soft);font-size:13px;margin:0 0 20px}
+.pf-field{margin-bottom:14px}
+.pf-field label{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--ink-mute);text-transform:uppercase;margin-bottom:6px}
+.pf-field label span{font-size:10px;font-weight:600;color:var(--ink-mute);text-transform:none;letter-spacing:0}
+.pf-input,.pf-textarea{width:100%;border:0;outline:0;font:inherit;font-size:14px;background:var(--surface);color:var(--ink);padding:12px 14px;border-radius:14px;box-shadow:var(--neu-in-sm)}
+.pf-textarea{resize:vertical;min-height:64px;max-height:100px}
+.pf-emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.pf-emoji-btn{border:0;cursor:pointer;font:inherit;width:100%;aspect-ratio:1;border-radius:12px;font-size:20px;background:var(--surface);box-shadow:var(--neu-out-sm);transition:all .15s;display:grid;place-items:center}
+.pf-emoji-btn.active{box-shadow:var(--clay-shadow),4px 5px 10px rgba(108,92,231,.4);background:linear-gradient(160deg,var(--clay-lilac),var(--accent-soft))}
+.pf-bg-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.pf-bg-btn{border:0;cursor:pointer;aspect-ratio:1;border-radius:12px;box-shadow:var(--clay-shadow),3px 4px 8px rgba(0,0,0,.10);transition:transform .2s}
+.pf-bg-btn.active{transform:scale(1.1);box-shadow:var(--clay-shadow),4px 5px 10px rgba(108,92,231,.4),0 0 0 3px var(--accent)}
+.pf-modal-actions{display:flex;gap:10px;margin-top:20px}
+.pf-btn{flex:1;border:0;cursor:pointer;padding:12px 16px;border-radius:var(--r-md);font:inherit;font-weight:700;font-size:14px;background:var(--surface);color:var(--ink);box-shadow:var(--neu-out-sm);transition:all .2s}
+.pf-btn:active{box-shadow:var(--neu-press)}
+.pf-btn.primary{background:linear-gradient(160deg,var(--accent-soft),var(--accent));color:#fff;box-shadow:var(--clay-shadow),6px 8px 16px rgba(108,92,231,.35)}
+.save-msg{font-size:12px;text-align:center;margin-top:8px;min-height:16px;color:var(--green-mid)}
+
+/* ── Avatar modal ── */
+.av-modal{position:fixed;inset:0;z-index:60;background:rgba(30,30,60,.4);backdrop-filter:blur(8px);display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.av-modal.open{opacity:1;pointer-events:auto}
+.av-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:20px 20px 60px rgba(60,40,120,.3);width:100%;max-width:380px;padding:24px;max-height:88vh;overflow-y:auto;transform:translateY(20px) scale(.96);transition:transform .35s cubic-bezier(0.34,1.56,0.64,1)}
+.av-modal.open .av-card{transform:translateY(0) scale(1)}
+.av-card h3{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin:0 0 14px}
+.av-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.av-option{aspect-ratio:1;border-radius:16px;display:grid;place-items:center;font-size:30px;cursor:pointer;box-shadow:var(--neu-out-sm);transition:all .2s;position:relative;background:var(--surface)}
+.av-option.selected{box-shadow:var(--clay-shadow),4px 5px 10px rgba(108,92,231,.35),0 0 0 3px var(--accent);background:linear-gradient(160deg,var(--clay-lilac),var(--accent-soft))}
+.av-option.locked{opacity:.45;cursor:default}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="top-bar-eyebrow">My Account</div>
+    <div class="top-bar-title">Profile</div>
+  </div>
+  <button class="edit-pill" id="editProfileBtn" onclick="openEdit()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+    Edit
+  </button>
+  <a href="user-settings.html" class="icon-btn">⚙️</a>
+</div>
+
+<div class="page-body">
+
+  <!-- Hero -->
+  <div class="pf-hero">
+    <div class="pf-avatar" id="avatarDisplay" onclick="openAvatarPicker()" style="background:linear-gradient(160deg,#c5b3ff,#8a7aff)">👤</div>
+    <div class="pf-hero-body">
+      <div class="pf-name" id="viewName">—</div>
+      <div class="pf-bio" id="viewBio"></div>
+      <div class="pf-chips" id="profileChips">
+        <span class="pf-chip member" id="roleChip">✓ Member</span>
+        <span class="pf-chip streak" id="streakChip" style="display:none">🔥 <span id="streakCount">0</span>d streak</span>
+        <span class="pf-chip age" id="pillAge" style="display:none">🎂 <span id="ageVal"></span></span>
+        <span class="pf-chip since" id="memberSinceLabel"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pf-grid">
+    <!-- LEFT -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <!-- Stats grid -->
+      <div class="pf-stats">
+        <div class="pf-stat">
+          <div class="pf-stat-ico c1">⭐</div>
+          <div class="pf-stat-lbl">Total points</div>
+          <div class="pf-stat-num" id="statPoints">—</div>
+          <div class="pf-stat-sub">All time</div>
+          <div class="pf-stat-spark" id="spark1"></div>
+        </div>
+        <div class="pf-stat">
+          <div class="pf-stat-ico c2">🔥</div>
+          <div class="pf-stat-lbl">Best streak</div>
+          <div class="pf-stat-num" id="statBestStreak">—</div>
+          <div class="pf-stat-sub">Days in a row</div>
+          <div class="pf-stat-spark" id="spark2"></div>
+        </div>
+        <div class="pf-stat">
+          <div class="pf-stat-ico c3">📥</div>
+          <div class="pf-stat-lbl">Sessions</div>
+          <div class="pf-stat-num" id="statVotes">—</div>
+          <div class="pf-stat-sub">Submitted</div>
+          <div class="pf-stat-spark" id="spark3"></div>
+        </div>
+        <div class="pf-stat">
+          <div class="pf-stat-ico c4">📅</div>
+          <div class="pf-stat-lbl">Weekly rank</div>
+          <div class="pf-stat-num" id="statWeeklyRank">—</div>
+          <div class="pf-stat-sub" id="weekRange">This week</div>
+          <div class="pf-stat-spark" id="spark4"></div>
+        </div>
+        <div class="pf-stat">
+          <div class="pf-stat-ico c5">📈</div>
+          <div class="pf-stat-lbl">Monthly rank</div>
+          <div class="pf-stat-num" id="statMonthlyRank">—</div>
+          <div class="pf-stat-sub">This month</div>
+          <div class="pf-stat-spark" id="spark5"></div>
+        </div>
+        <div class="pf-stat">
+          <div class="pf-stat-ico c6">🏆</div>
+          <div class="pf-stat-lbl">All-time rank</div>
+          <div class="pf-stat-num" id="statAllTimeRank">—</div>
+          <div class="pf-stat-sub">Overall</div>
+          <div class="pf-stat-spark" id="spark6"></div>
+        </div>
+      </div>
+
+      <!-- Week chart -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2 class="card-h">This week</h2>
+            <div class="card-sub">Daily activity</div>
+          </div>
+          <div class="card-badge" id="weekRangeLabel">—</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+          <div class="pf-stat-mini"><div class="pf-stat-mini-v" id="chartWeekPts">—</div><div class="pf-stat-mini-l">Pts this week</div></div>
+          <div class="pf-stat-mini"><div class="pf-stat-mini-v" id="chartWeekSess">—</div><div class="pf-stat-mini-l">Sessions</div></div>
+          <div class="pf-stat-mini"><div class="pf-stat-mini-v" id="chartWeekStreak">—</div><div class="pf-stat-mini-l">Streak</div></div>
+        </div>
+        <div class="pf-week" id="weekChart"></div>
+        <div class="pf-week-foot" id="weekSummary"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <!-- Tier card -->
+      <div class="pf-tier" id="tierCard">
+        <div class="pf-tier-top">
+          <div>
+            <div class="pf-tier-eye">Current Tier</div>
+            <div class="pf-tier-h" id="tierName">—</div>
+          </div>
+          <div class="pf-tier-badge" id="tierBadge">🌱</div>
+        </div>
+        <div class="pf-tier-bar"><div class="pf-tier-fill" id="tierFill"></div></div>
+        <div class="pf-tier-foot">
+          <span id="tierCurrent">0 pts</span>
+          <span id="tierNext"></span>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2 class="card-h">Recent activity</h2>
+            <div class="card-sub">Your latest sessions</div>
+          </div>
+        </div>
+        <div class="pf-acts" id="activityList">
+          <div class="pf-acts-empty">Loading…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="app-nav">
+  <a href="user-home.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="user-leaderboard.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><rect x="2" y="14" width="4" height="7" rx="1"/><rect x="9" y="9" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg>
+    <span>Leaderboard</span>
+  </a>
+  <a href="user-resources.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <span>Library</span>
+  </a>
+  <a href="user-profile.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span>Profile</span>
+  </a>
+</nav>
+
+<!-- Edit modal -->
+<div class="pf-modal-scrim" id="editScrim">
+  <div class="pf-modal" id="editCard">
+    <button class="pf-modal-close" id="editCloseBtn" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3>Edit Profile</h3>
+    <p>Changes are saved to your account.</p>
+    <div class="pf-field">
+      <label>Display name</label>
+      <input class="pf-input" type="text" id="editName" maxlength="40" placeholder="Your name">
+    </div>
+    <div class="pf-field">
+      <label>Bio <span id="bioCounter">0 / 30</span></label>
+      <textarea class="pf-textarea" id="editBio" maxlength="30" placeholder="A short line about you…" oninput="updateBioCounter()"></textarea>
+    </div>
+    <div class="pf-field">
+      <label>Date of birth <span>(used to display your age)</span></label>
+      <input class="pf-input" type="date" id="editDob">
+    </div>
+    <div class="pf-modal-actions">
+      <button class="pf-btn" onclick="closeEdit()">Cancel</button>
+      <button class="pf-btn primary" onclick="saveProfile()">Save changes</button>
+    </div>
+    <div class="save-msg" id="saveMsg"></div>
+  </div>
+</div>
+
+<!-- Avatar picker modal -->
+<div class="av-modal" id="avatarModal">
+  <div class="av-card">
+    <h3>Choose avatar</h3>
+    <p style="color:var(--ink-soft);font-size:13px;margin:-4px 0 14px">Pick an emoji and background colour</p>
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--ink-mute);text-transform:uppercase;margin-bottom:8px">Emoji</div>
+    <div class="av-grid" id="avatarGrid"></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--ink-mute);text-transform:uppercase;margin:14px 0 8px">Background</div>
+    <div class="pf-bg-grid" id="avBgGrid"></div>
+    <div class="pf-modal-actions" style="margin-top:18px">
+      <button class="pf-btn" onclick="closeAvatarPicker()">Cancel</button>
+      <button class="pf-btn primary" onclick="saveAvatar()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { t, getLang, applyLang } from "./lang.js";
+import {
+  collection, query, where, getDocs,
+  getDoc, updateDoc, doc
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const phone = localStorage.getItem("ff_phone");
+if(!phone) location.replace("login.html");
+applyLang();
+
+let userDocId=null, userData=null, allAvatars=[], selectedAv=null;
+
+const EMOJIS=["👤","🦊","🐻","🐯","🦉","🐸","🦁","🦩","🐳","🐶","🐢","🦄","🐥","🐧","🌱","🌸","⭐","🔥","🎯","💫","🍀","🌙"];
+const BGS=[
+  "linear-gradient(160deg,#c5b3ff,#8a7aff)",
+  "linear-gradient(160deg,#a8c8ff,#6c8eff)",
+  "linear-gradient(160deg,#ffb3c7,#ff7eb6)",
+  "linear-gradient(160deg,#a8e6cf,#4cbf94)",
+  "linear-gradient(160deg,#ffc89a,#ff8a5b)",
+  "linear-gradient(160deg,#ffe08a,#ffb347)",
+  "linear-gradient(160deg,#ff9eb3,#ff5a7a)",
+  "linear-gradient(160deg,#b3e6ff,#5ac8fa)",
+  "linear-gradient(160deg,#d4ffb3,#88d44a)",
+  "linear-gradient(160deg,#e0c2ff,#b07aff)",
+  "linear-gradient(160deg,#ffd2a8,#d18a5b)",
+  "linear-gradient(160deg,#c2d4ff,#5a7aff)",
+];
+
+const DEFAULT_AVATARS=[
+  {id:"avatar-default",emoji:"🧑",label:"Default",unlockAchievementId:null},
+  {id:"avatar-star",emoji:"⭐",label:"Star",unlockAchievementId:null},
+  {id:"avatar-fire",emoji:"🔥",label:"On Fire",unlockAchievementId:null},
+  {id:"avatar-crown",emoji:"👑",label:"Champion",unlockAchievementId:null},
+  {id:"avatar-gem",emoji:"💎",label:"Diamond",unlockAchievementId:null},
+  {id:"avatar-leaf",emoji:"🌿",label:"Nature",unlockAchievementId:null},
+  {id:"avatar-moon",emoji:"🌙",label:"Night Owl",unlockAchievementId:null},
+  {id:"avatar-sun",emoji:"☀️",label:"Sunshine",unlockAchievementId:null},
+];
+
+let draftEmoji="👤";
+let draftBg=BGS[0];
+
+function escHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function fmt(n){return n!=null?Number(n).toLocaleString():"—";}
+
+
+function makeSpark(vals,color,fillColor){
+  const w=200,h=34,pad=4;
+  const mn=Math.min(...vals),mx=Math.max(...vals,1);
+  const xs=vals.map((_,i)=>pad+i*(w-pad*2)/(vals.length-1||1));
+  const ys=vals.map(v=>h-pad-(v-mn)/(mx-mn||1)*(h-pad*2));
+  let d="M"+xs.map((x,i)=>x.toFixed(1)+","+ys[i].toFixed(1)).join(" L");
+  let df=d+" L"+xs[xs.length-1].toFixed(1)+","+(h-1)+" L"+xs[0].toFixed(1)+","+(h-1)+" Z";
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="sg${color.replace(/[^a-z]/gi,'')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity=".35"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><path d="${df}" fill="url(#sg${color.replace(/[^a-z]/gi,'')})" stroke="none"/><path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function setStatSpark(id,vals,color){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=vals.length>1?makeSpark(vals,color,""):"";
+}
+// Decorative static sparks until real data loads
+// Static decorative sparklines - same smooth curves for all users
+const SPARK_DATA=[
+  {id:"spark1",pts:[3,5,4,7,6,9,8],col:"#4cbf94"},
+  {id:"spark2",pts:[2,4,6,5,7,6,8],col:"#ff8a5b"},
+  {id:"spark3",pts:[1,3,2,5,4,6,5],col:"#6c8eff"},
+  {id:"spark4",pts:[8,6,7,5,6,4,5],col:"#ffc24a"},
+  {id:"spark5",pts:[7,5,6,4,5,3,4],col:"#ff5a7a"},
+  {id:"spark6",pts:[9,7,8,6,7,5,6],col:"#8a7aff"},
+];
+SPARK_DATA.forEach(({id,pts,col})=>setStatSpark(id,pts,col));
+
+async function load(){
+  const q=query(collection(db,"users"),where("phone","==",phone));
+  const snap=await getDocs(q);
+  if(snap.empty){location.replace("login.html");return;}
+  userDocId=snap.docs[0].id;
+  userData=snap.docs[0].data();
+
+  // Role sync
+  const role=userData.role||"user";
+  if(role!==localStorage.getItem("ff_role")) localStorage.setItem("ff_role",role);
+  document.getElementById("viewName").textContent=userData.name||"—";
+
+  // Bio (capped at 30 chars displayed)
+  const bio=(userData.bio||"").slice(0,30);
+  const bioEl=document.getElementById("viewBio");
+  if(bio){bioEl.textContent=bio;bioEl.style.display="";}
+  else bioEl.style.display="none";
+
+  // Role chip
+  document.getElementById("roleChip").textContent="✓ "+(role==="admin"?"Admin":"Member");
+
+  // Streak
+  const streak=userData.currentStreak||0;
+  document.getElementById("streakCount").textContent=streak;
+  document.getElementById("streakChip").style.display=streak>0?"":"none";
+
+  // Age
+  if(userData.dateOfBirth){
+    const age=Math.floor((Date.now()-new Date(userData.dateOfBirth).getTime())/(365.25*24*3600*1000));
+    if(age>=5&&age<120){
+      document.getElementById("ageVal").textContent=age+"y";
+      document.getElementById("pillAge").style.display="";
+    }
+  }
+
+  // Member since
+  if(userData.joinDate){
+    document.getElementById("memberSinceLabel").textContent="Since "+userData.joinDate;
+    document.getElementById("memberSinceLabel").style.display="";
+  } else {
+    document.getElementById("memberSinceLabel").style.display="none";
+  }
+
+  // Stats
+  document.getElementById("statPoints").textContent=fmt(userData.totalPoints);
+  document.getElementById("statBestStreak").textContent=(userData.bestStreak||0)+"d";
+  document.getElementById("statVotes").textContent=fmt(userData.totalVotesCount);
+
+  // Avatar
+  try{
+    const settingsDoc=await getDoc(doc(db,"settings","app"));
+    allAvatars=settingsDoc.exists()&&settingsDoc.data().avatars?settingsDoc.data().avatars:DEFAULT_AVATARS;
+  }catch(e){allAvatars=DEFAULT_AVATARS;}
+
+  if(userData.avatarId) localStorage.setItem("ff_avatar_id",userData.avatarId);
+  renderCurrentAvatar();
+
+  renderTier(userData.totalPoints||0);
+
+  loadLiveRank();
+}
+load();
+
+function renderCurrentAvatar(){
+  const av=allAvatars.find(a=>a.id===(userData.avatarId||"avatar-default"))||allAvatars[0];
+  const emoji=av?av.emoji:"👤";
+  const bg=userData.avatarBg||BGS[0];
+  const el=document.getElementById("avatarDisplay");
+  el.textContent=emoji;
+  el.style.background=bg;
+  draftEmoji=emoji;
+  draftBg=bg;
+}
+
+const TIERS=[
+  {name:"Seedling",emoji:"🌱",min:0,max:50},
+  {name:"Sprout",emoji:"🌿",min:50,max:100},
+  {name:"Grower",emoji:"🍃",min:100,max:250},
+  {name:"Seeker",emoji:"🌸",min:250,max:500},
+  {name:"Devotee",emoji:"⭐",min:500,max:1000},
+  {name:"Guardian",emoji:"⚡",min:1000,max:2000},
+  {name:"Champion",emoji:"🏆",min:2000,max:3000},
+  {name:"Legend",emoji:"💎",min:3000,max:5000},
+  {name:"Ascendant",emoji:"👑",min:5000,max:Infinity},
+];
+function renderTier(pts){
+  const tier=TIERS.find(t=>pts>=t.min&&pts<t.max)||TIERS[TIERS.length-1];
+  const next=TIERS[TIERS.indexOf(tier)+1];
+  document.getElementById("tierName").textContent=tier.name;
+  document.getElementById("tierBadge").textContent=tier.emoji;
+  if(next){
+    const pct=Math.min(100,Math.round(((pts-tier.min)/(next.min-tier.min))*100));
+    document.getElementById("tierFill").style.width=pct+"%";
+    document.getElementById("tierCurrent").textContent=pts+" pts";
+    document.getElementById("tierNext").textContent=next.min+" pts → "+next.name;
+  } else {
+    document.getElementById("tierFill").style.width="100%";
+    document.getElementById("tierCurrent").textContent=pts+" pts";
+    document.getElementById("tierNext").textContent="Max tier reached 👑";
+  }
+}
+async function loadLiveRank(){
+  try{
+    const now=new Date(),day=now.getDay();
+    const mon=new Date(now);mon.setDate(now.getDate()-(day===0?6:day-1));
+    const weekFrom=mon.toISOString().split("T")[0];
+    const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+    const weekTo=sun.toISOString().split("T")[0];
+    const monthFrom=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-01`;
+    const lastDay=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    const monthTo=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(lastDay).padStart(2,"0")}`;
+
+    const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const fmtD=d=>`${MN[d.getMonth()]} ${d.getDate()}`;
+    document.getElementById("weekRangeLabel").textContent=`${fmtD(mon)} — ${fmtD(sun)}`;
+    document.getElementById("weekRange").textContent=`${fmtD(mon)} — ${fmtD(sun)}`;
+
+    const[usersSnap,votesSnap]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"votes"))]);
+    const phoneToId={},usersMap={};
+    usersSnap.forEach(d=>{const u=d.data();phoneToId[u.phone]=d.id;usersMap[d.id]={id:d.id,allPts:u.totalPoints||0,weekPts:0,monthPts:0,weekSessions:0};});
+
+    const myDayPts=[0,0,0,0,0,0,0];
+    const myDayHas=[false,false,false,false,false,false,false];
+    const myActivities=[];
+
+    votesSnap.forEach(d=>{
+      const v=d.data();const uid=phoneToId[v.phone];
+      if(!uid||!usersMap[uid]||!v.date)return;
+      const pts=Number(v.points||0);
+      if(v.date>=weekFrom&&v.date<=weekTo){
+        usersMap[uid].weekPts+=pts;
+        usersMap[uid].weekSessions++;
+        if(v.phone===phone){
+          const vDay=new Date(v.date).getDay();
+          const idx=(vDay+6)%7;
+          myDayPts[idx]+=pts;
+          myDayHas[idx]=true;
+        }
+      }
+      if(v.date>=monthFrom&&v.date<=monthTo)usersMap[uid].monthPts+=pts;
+      if(v.phone===phone) myActivities.push({date:v.date,pts});
+    });
+
+    const users=Object.values(usersMap);
+    function denseRank(arr,field){
+      const sorted=[...arr].sort((a,b)=>b[field]-a[field]);
+      let rank=1,prev=null,out={};
+      sorted.forEach((u,i)=>{
+        if(u[field]<=0){out[u.id]=null;return;}
+        if(u[field]!==prev){rank=i+1;prev=u[field];}
+        out[u.id]=rank;
+      });
+      return out;
+    }
+    const allRanks=denseRank(users,"allPts");
+    const weekRanks=denseRank(users,"weekPts");
+    const monthRanks=denseRank(users,"monthPts");
+    const r=v=>v!=null?"#"+v:"—";
+    document.getElementById("statAllTimeRank").textContent=r(allRanks[userDocId]);
+    document.getElementById("statWeeklyRank").textContent=r(weekRanks[userDocId]);
+    document.getElementById("statMonthlyRank").textContent=r(monthRanks[userDocId]);
+
+
+    // Week chart
+    const me=usersMap[userDocId];
+    const todayIdx=(now.getDay()+6)%7;
+    const DAY_LABELS=["M","T","W","T","F","S","S"];
+    const maxPts=Math.max(...myDayPts,1);
+    const chartEl=document.getElementById("weekChart");
+    chartEl.innerHTML="";
+    // Stat mini tiles
+    const wkPts=myDayPts.reduce((s,v)=>s+v,0);
+    const wkSess=myDayHas.filter(Boolean).length;
+    const wPtsEl=document.getElementById("chartWeekPts");
+    const wSessEl=document.getElementById("chartWeekSess");
+    const wStrkEl=document.getElementById("chartWeekStreak");
+    if(wPtsEl) wPtsEl.textContent=wkPts;
+    if(wSessEl) wSessEl.textContent=wkSess;
+    if(wStrkEl) wStrkEl.textContent=(userData.currentStreak||0)+"d";
+    DAY_LABELS.forEach((lbl,i)=>{
+      const isToday=i===todayIdx;
+      const isFuture=i>todayIdx;
+      const div=document.createElement("div");
+      div.className="pf-day"+(isToday?" today":"");
+      div.innerHTML=`<div class="pf-day-l">${lbl}</div><div class="pf-day-bar-track"><div class="pf-day-bar" style="height:0%"></div></div><div class="pf-day-v" style="opacity:${isFuture?0.2:myDayPts[i]>0?1:0.3}">${myDayPts[i]}</div>`;
+      chartEl.appendChild(div);
+      const bar=div.querySelector(".pf-day-bar");
+      const pct=myDayPts[i]>0?Math.max(8,(myDayPts[i]/maxPts)*100):(myDayHas[i]?4:0);
+      if(isFuture) bar.style.opacity="0.15";
+      requestAnimationFrame(()=>{setTimeout(()=>{bar.style.height=pct+"%";},80+i*30);});
+    });
+    const weekSessions=me?me.weekSessions:0;
+    const weekPts2=me?me.weekPts:0;
+    const missedDays=myDayPts.slice(0,todayIdx+1).filter(p=>p===0).length;
+    document.getElementById("weekSummary").innerHTML=`<span><b>${weekSessions}</b> sessions</span><span><b>${weekPts2}</b> pts</span><span><b>${missedDays}</b> miss${missedDays!==1?"es":""}`;
+
+    // Recent activity
+    myActivities.sort((a,b)=>b.date.localeCompare(a.date));
+    const actEl=document.getElementById("activityList");
+    if(myActivities.length===0){
+      actEl.innerHTML=`<div class="pf-acts-empty">No sessions yet — keep going! 🌱</div>`;
+    } else {
+      actEl.innerHTML="";
+      myActivities.slice(0,6).forEach(a=>{
+        const d=new Date(a.date);
+        const dateStr=`${MN[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+        const div=document.createElement("div");
+        div.className="pf-act";
+        div.innerHTML=`<div class="pf-act-ico session">📥</div><div><div class="pf-act-title">Daily session</div><div class="pf-act-meta">${dateStr} · +${a.pts} pts</div></div>`;
+        actEl.appendChild(div);
+      });
+    }
+
+  }catch(e){console.error("loadLiveRank:",e);}
+}
+
+// ── Edit modal ──
+window.updateBioCounter=()=>{
+  const ta=document.getElementById("editBio");
+  const counter=document.getElementById("bioCounter");
+  const len=ta.value.length;
+  counter.textContent=len+" / 30";
+  counter.style.color=len>=30?"#cc3060":"";
+};
+
+window.openEdit=()=>{
+  if(!userData) return;
+  const av=allAvatars.find(a=>a.id===(userData.avatarId||"avatar-default"))||allAvatars[0];
+  draftEmoji=av?av.emoji:"👤";
+  draftBg=userData.avatarBg||BGS[0];
+
+  document.getElementById("editName").value=userData.name||"";
+  const bioVal=(userData.bio||"").slice(0,30);
+  document.getElementById("editBio").value=bioVal;
+  document.getElementById("editDob").value=userData.dateOfBirth||"";
+  document.getElementById("bioCounter").textContent=bioVal.length+" / 30";
+  document.getElementById("saveMsg").textContent="";
+  document.getElementById("editScrim").classList.add("open");
+};
+
+window.closeEdit=()=>{
+  document.getElementById("editScrim").classList.remove("open");
+};
+document.getElementById("editCloseBtn").addEventListener("click",window.closeEdit);
+document.getElementById("editScrim").addEventListener("click",e=>{if(e.target===document.getElementById("editScrim"))window.closeEdit();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){window.closeEdit();closeAvatarPicker();}});
+
+window.saveProfile=async()=>{
+  const newName=(document.getElementById("editName").value||"").trim();
+  const newBio=(document.getElementById("editBio").value||"").slice(0,30);
+  const newDob=document.getElementById("editDob").value||null;
+  const msg=document.getElementById("saveMsg");
+  if(!newName){msg.style.color="#cc3060";msg.textContent="Name cannot be empty.";return;}
+
+  try{
+    await updateDoc(doc(db,"users",userDocId),{
+      name:newName,
+      bio:newBio,
+      dateOfBirth:newDob||null,
+    });
+    userData.name=newName;
+    userData.bio=newBio;
+    userData.dateOfBirth=newDob||null;
+    localStorage.setItem("ff_name",newName);
+
+    document.getElementById("viewName").textContent=newName;
+    const bioEl=document.getElementById("viewBio");
+    if(newBio){bioEl.textContent=newBio;bioEl.style.display="";}
+    else bioEl.style.display="none";
+
+    if(newDob){
+      const age=Math.floor((Date.now()-new Date(newDob).getTime())/(365.25*24*3600*1000));
+      if(age>=5&&age<120){document.getElementById("ageVal").textContent=age+"y";document.getElementById("pillAge").style.display="";}
+      else document.getElementById("pillAge").style.display="none";
+    } else {
+      document.getElementById("pillAge").style.display="none";
+    }
+
+    renderCurrentAvatar();
+    msg.style.color="#2f8a4a";msg.textContent="Saved ✅";
+    setTimeout(()=>{msg.textContent="";window.closeEdit();},1200);
+  }catch(e){msg.style.color="#cc3060";msg.textContent="Failed to save. Try again.";}
+};
+
+// ── Avatar picker ──
+window.openAvatarPicker=()=>{
+  if(!userData) return;
+  selectedAv=userData.avatarId||"avatar-default";
+  draftBg=userData.avatarBg||BGS[0];
+  renderAvatarGrid();
+  renderAvBgGrid();
+  document.getElementById("avatarModal").classList.add("open");
+};
+
+function renderAvBgGrid(){
+  const grid=document.getElementById("avBgGrid");
+  if(!grid) return;
+  grid.innerHTML="";
+  BGS.forEach(bg=>{
+    const b=document.createElement("button");
+    b.className="pf-bg-btn"+(bg===draftBg?" active":"");
+    b.type="button";b.style.background=bg;b.dataset.bg=bg;
+    b.addEventListener("click",()=>{
+      draftBg=bg;
+      [...grid.children].forEach(x=>x.classList.toggle("active",x.dataset.bg===draftBg));
+    });
+    grid.appendChild(b);
+  });
+}
+window.closeAvatarPicker=()=>document.getElementById("avatarModal").classList.remove("open");
+document.getElementById("avatarModal").addEventListener("click",e=>{if(e.target===document.getElementById("avatarModal"))window.closeAvatarPicker();});
+
+function renderAvatarGrid(){
+  const grid=document.getElementById("avatarGrid");
+  grid.innerHTML="";
+  allAvatars.forEach(av=>{
+    const isSelected=av.id===selectedAv;
+    const div=document.createElement("div");
+    div.className="av-option"+(isSelected?" selected":"");
+    div.style.background=isSelected?(userData.avatarBg||BGS[0]):"var(--surface)";
+    div.textContent=av.emoji;
+    div.style.fontSize="28px";
+    div.addEventListener("click",()=>{
+      selectedAv=av.id;
+      renderAvatarGrid();
+    });
+    grid.appendChild(div);
+  });
+}
+
+window.saveAvatar=async()=>{
+  if(!selectedAv)return;
+  try{
+    await updateDoc(doc(db,"users",userDocId),{avatarId:selectedAv,avatarBg:draftBg});
+    userData.avatarId=selectedAv;
+    userData.avatarBg=draftBg;
+    localStorage.setItem("ff_avatar_id",selectedAv);
+    localStorage.removeItem("ff_lb_users");localStorage.removeItem("ff_lb_votes");localStorage.removeItem("ff_lb_ts");
+    renderCurrentAvatar();
+    window.closeAvatarPicker();
+  }catch(e){console.error("saveAvatar:",e);}
+};
+</script>
+</body>
+</html>
