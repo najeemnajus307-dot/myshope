@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home | Faith &amp; Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ecebf4;--surface:#ecebf4;--lit:#ffffff;--shade:#b8b9c8;
+  --ink:#2a2c3e;--ink-soft:#6b6d82;--ink-mute:#9a9cb0;
+  --r-lg:28px;--r-md:20px;--r-sm:14px;
+  --neu-out:14px 14px 30px var(--shade),-14px -14px 30px var(--lit);
+  --neu-out-sm:8px 8px 18px var(--shade),-8px -8px 18px var(--lit);
+  --neu-in-sm:inset 4px 4px 10px var(--shade),inset -4px -4px 10px var(--lit);
+  --clay-shadow:inset 0 -8px 0 rgba(60,30,80,.10),inset 0 8px 0 rgba(255,255,255,.65);
+  --green-deep:#0d4a28;--green-mid:#1c7a3e;--green-leaf:#72b534;
+  --clay-mint:#a8e6cf;--clay-peach:#ffc89a;--clay-lilac:#c5b3ff;--clay-rose:#ff9eb3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);min-height:100vh}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82px;-webkit-font-smoothing:antialiased}
+
+/* top navbar */
+.top-nav{background:var(--surface);box-shadow:0 4px 16px rgba(184,185,200,.4),0 1px 0 rgba(255,255,255,.8);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.top-nav-brand{display:flex;align-items:center;gap:10px}
+.top-nav-ico{width:36px;height:36px;border-radius:12px;background:linear-gradient(160deg,var(--clay-mint),#4cbf94);box-shadow:var(--clay-shadow),3px 4px 8px rgba(76,191,148,.3);display:grid;place-items:center;font-size:17px}
+.top-nav-title{font-family:'Fraunces',serif;font-weight:700;font-size:17px;letter-spacing:-.3px}
+.top-nav-sub{font-size:10px;color:var(--ink-mute);font-weight:600;letter-spacing:.5px}
+.top-nav-greeting{font-size:13px;color:var(--ink-soft);font-weight:600}
+
+/* bottom nav */
+.app-nav{position:fixed;z-index:200;bottom:0;left:0;right:0;background:var(--surface);box-shadow:0 -6px 24px rgba(184,185,200,.55),0 -1px 0 rgba(255,255,255,.9);display:flex;padding:6px 8px max(8px,env(safe-area-inset-bottom))}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink-mute);gap:3px;padding:6px 4px 4px;border-radius:14px;transition:all .2s}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.nav-item span{font-size:10px;font-weight:600;letter-spacing:.3px}
+.nav-item.active{color:var(--green-mid);background:linear-gradient(160deg,rgba(114,181,52,.12),rgba(28,122,62,.08));box-shadow:var(--neu-in-sm)}
+.nav-item.active svg{transform:scale(1.15);stroke:var(--green-mid)}
+
+.page{max-width:560px;margin:0 auto;padding:20px 18px 20px}
+
+/* streak card */
+.streak-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
+.streak-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(114,181,52,.07),rgba(108,92,231,.05));pointer-events:none}
+.streak-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.streak-flame{width:62px;height:62px;border-radius:20px;background:linear-gradient(160deg,var(--clay-peach),#ff8a5b);box-shadow:var(--clay-shadow),6px 8px 18px rgba(255,138,91,.35);display:grid;place-items:center;font-size:30px;flex-shrink:0}
+.streak-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--ink-mute);margin-bottom:4px}
+.streak-num{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(40px,10vw,54px);line-height:1;letter-spacing:-2px}
+.streak-unit{font-size:13px;color:var(--ink-soft);margin-top:2px}
+.streak-divider{height:1px;background:linear-gradient(90deg,transparent,var(--shade),transparent);margin-bottom:16px}
+.pts-row{display:flex;align-items:center;justify-content:space-between}
+.pts-left{display:flex;align-items:center;gap:12px}
+.pts-ico{width:42px;height:42px;border-radius:14px;background:linear-gradient(160deg,var(--clay-lilac),#8a7aff);box-shadow:var(--clay-shadow),4px 5px 10px rgba(138,122,255,.3);display:grid;place-items:center;font-size:20px}
+.pts-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--ink-mute);margin-bottom:2px}
+.pts-num{font-family:'Fraunces',serif;font-weight:700;font-size:24px;letter-spacing:-.4px}
+.tier-pill{background:var(--surface);box-shadow:var(--neu-in-sm);border-radius:999px;padding:7px 15px;font-size:12px;font-weight:700;color:var(--green-mid);white-space:nowrap}
+
+/* voting */
+.vote-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px}
+.vote-eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--ink-mute);margin-bottom:16px}
+.vote-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.vote-ico{width:56px;height:56px;border-radius:20px;display:grid;place-items:center;font-size:26px;box-shadow:var(--clay-shadow),6px 8px 16px rgba(0,0,0,.12);flex-shrink:0;transition:background .5s}
+.vote-ico.open{background:linear-gradient(160deg,var(--clay-mint),#4cbf94)}
+.vote-ico.closed{background:linear-gradient(160deg,var(--clay-rose),#ff5a7a)}
+.vote-title{font-family:'Fraunces',serif;font-weight:700;font-size:21px;letter-spacing:-.3px}
+.vote-desc{font-size:13px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+.vote-countdown{font-family:'Fraunces',serif;font-size:34px;font-weight:800;letter-spacing:-1.5px;color:var(--ink);background:var(--surface);box-shadow:var(--neu-in-sm);border-radius:var(--r-md);padding:16px;text-align:center}
+.vote-cd-label{font-size:11px;color:var(--ink-mute);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="top-nav-brand">
+    <div class="top-nav-ico">🕌</div>
+    <div>
+      <div class="top-nav-title">Faith &amp; Fitness</div>
+      <div class="top-nav-sub">Wellness in Worship</div>
+    </div>
+  </div>
+  <div class="top-nav-greeting" id="greeting">—</div>
+</nav>
+
+<div class="page">
+
+  <div class="streak-card">
+    <div class="streak-top">
+      <div class="streak-flame">🔥</div>
+      <div>
+        <div class="streak-label">Day Streak</div>
+        <div class="streak-num" id="streakNum">—</div>
+        <div class="streak-unit">days in a row</div>
+      </div>
+    </div>
+    <div class="streak-divider"></div>
+    <div class="pts-row">
+      <div class="pts-left">
+        <div class="pts-ico">⭐</div>
+        <div>
+          <div class="pts-label">Total Points</div>
+          <div class="pts-num" id="ptsNum">—</div>
+        </div>
+      </div>
+      <div class="tier-pill" id="tierPill">🌱 Seedling</div>
+    </div>
+  </div>
+
+  <div class="vote-card">
+    <div class="vote-eyebrow">Daily Session</div>
+    <div class="vote-row">
+      <div class="vote-ico closed" id="voteIco">🔒</div>
+      <div>
+        <div class="vote-title" id="voteTitle">Checking…</div>
+        <div class="vote-desc" id="voteDesc"></div>
+      </div>
+    </div>
+    <div class="vote-countdown" id="voteCd">—</div>
+    <div class="vote-cd-label" id="voteLbl"></div>
+  </div>
+
+</div>
+
+<nav class="app-nav">
+  <a href="user-home.html" class="nav-item active">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="user-leaderboard.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><rect x="2" y="14" width="4" height="7" rx="1"/><rect x="9" y="9" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg>
+    <span>Leaderboard</span>
+  </a>
+  <a href="user-resources.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <span>Library</span>
+  </a>
+  <a href="user-profile.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span>Profile</span>
+  </a>
+</nav>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { collection, query, where, getDocs }
+  from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const phone = localStorage.getItem("ff_phone");
+if(!phone) location.replace("login.html");
+
+const hr=new Date().getHours();
+document.getElementById("greeting").textContent=hr<12?"Morning ☀️":hr<17?"Afternoon 🌤️":"Evening 🌙";
+
+const TIERS=[
+  {n:"Seedling",e:"🌱",m:0},{n:"Sprout",e:"🌿",m:50},{n:"Grower",e:"🍃",m:100},
+  {n:"Seeker",e:"🌸",m:250},{n:"Devotee",e:"⭐",m:500},{n:"Guardian",e:"⚡",m:1000},
+  {n:"Champion",e:"🏆",m:2000},{n:"Legend",e:"💎",m:3000},{n:"Ascendant",e:"👑",m:5000},
+];
+function getTier(p){return[...TIERS].reverse().find(t=>p>=t.m)||TIERS[0];}
+
+getDocs(query(collection(db,"users"),where("phone","==",phone))).then(snap=>{
+  if(snap.empty)return;
+  const u=snap.docs[0].data();
+  const pts=u.totalPoints||0,streak=u.currentStreak||0;
+  document.getElementById("streakNum").textContent=streak;
+  document.getElementById("ptsNum").textContent=pts.toLocaleString();
+  const t=getTier(pts);
+  document.getElementById("tierPill").textContent=t.e+" "+t.n;
+}).catch(()=>{});
+
+function getWin(){
+  const h=new Date().getHours();
+  if(h>=20||h<12){const c=new Date();if(h>=20){c.setDate(c.getDate()+1);c.setHours(12,0,0,0);}else c.setHours(12,0,0,0);return{open:true,end:c};}
+  const o=new Date();o.setHours(20,0,0,0);return{open:false,end:o};
+}
+function fmt(ms){const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000),s=Math.floor((ms%60000)/1000);return`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;}
+function tick(){
+  const w=getWin(),diff=Math.max(0,w.end-Date.now());
+  const ico=document.getElementById("voteIco");
+  ico.className="vote-ico "+(w.open?"open":"closed");
+  ico.textContent=w.open?"✅":"🔒";
+  document.getElementById("voteTitle").textContent=w.open?"Voting is Open":"Voting Closed";
+  document.getElementById("voteDesc").textContent=w.open?"Submit your daily session before the window closes.":"Next window opens at 8:00 PM.";
+  document.getElementById("voteCd").textContent=fmt(diff);
+  document.getElementById("voteLbl").textContent=w.open?"Closes in":"Opens in";
+}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
