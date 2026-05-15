@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Reports | Faith &amp; Fitness</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;min-height:100vh}
+.wrap{display:flex;min-height:100vh}
+#adminSidebar{flex-shrink:0}
+.main{flex:1;padding:20px;overflow-x:hidden}
+
+.page-title{font-size:20px;font-weight:bold;color:#14532d;margin-bottom:18px}
+.section-title{
+  font-size:12px;font-weight:bold;letter-spacing:.8px;
+  color:#64748b;text-transform:uppercase;margin-bottom:12px;
+}
+.card{
+  background:#fff;border-radius:12px;padding:18px;
+  margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* ── Tab bar ── */
+.tab-bar{
+  display:flex;gap:0;border-radius:10px;overflow:hidden;
+  border:1.5px solid #e2e8f0;margin-bottom:18px;background:#f8fafc;
+}
+.tab-btn{
+  flex:1;padding:10px 6px;text-align:center;font-size:13px;
+  font-weight:bold;cursor:pointer;border:none;
+  background:transparent;color:#64748b;transition:all .15s;
+}
+.tab-btn.active{background:#14532d;color:#fff}
+
+/* ── Filters ── */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-row label{font-size:13px;color:#475569}
+.filter-row input[type=date],
+.filter-row select{
+  padding:7px 10px;border:1.5px solid #e2e8f0;
+  border-radius:7px;font-size:13px;outline:none;background:#fff;
+}
+.filter-row input:focus,.filter-row select:focus{border-color:#16a34a}
+
+/* ── Buttons ── */
+.btn{padding:8px 16px;border:none;border-radius:7px;font-size:13px;font-weight:bold;cursor:pointer}
+.btn-green{background:#16a34a;color:#fff}
+.btn-green:hover{opacity:.88}
+.btn-csv{background:#0284c7;color:#fff}
+.btn-csv:hover{opacity:.88}
+
+/* ── Table ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:400px}
+th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:center;font-size:13px}
+th{background:#14532d;color:#fff;white-space:nowrap}
+tr:nth-child(even) td{background:#f8fafc}
+td.left{text-align:left}
+.rank1 td{background:#fde047!important}
+.rank2 td{background:#e5e7eb!important}
+.rank3 td{background:#fecaca!important}
+
+/* ── Badges ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold}
+.badge-voted{background:#dcfce7;color:#16a34a}
+.badge-not{background:#fee2e2;color:#dc2626}
+.badge-admin{background:#dbeafe;color:#1d4ed8}
+
+/* Delete btn */
+.btn-del{padding:3px 8px;border:none;border-radius:4px;background:#dc2626;color:#fff;font-size:11px;cursor:pointer;font-weight:bold}
+
+/* Sections */
+.report-section{display:none}
+.report-section.active{display:block}
+
+/* Summary row */
+.summary-row{
+  display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;
+}
+.sum-box{
+  flex:1;min-width:100px;background:#f8fafc;
+  border:1px solid #e2e8f0;border-radius:9px;
+  padding:12px;text-align:center;
+}
+.sum-val{font-size:22px;font-weight:bold;color:#14532d}
+.sum-lbl{font-size:11px;color:#64748b;margin-top:3px}
+
+.empty-msg{text-align:center;padding:24px;color:#94a3b8;font-size:13px}
+
+@media(max-width:700px){.wrap{flex-direction:column}}
+</style>
+<!-- OneSignal Push Notifications -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "05d57d24-d6bc-40ab-8549-ea6dcf506070",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: { enable: true },
+    });
+  });
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div id="adminSidebar"></div>
+
+  <main class="main">
+    <div class="page-title">📊 Reports</div>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('task',this)">📋 Task Report</button>
+      <button class="tab-btn"        onclick="switchTab('user',this)">👤 User Report</button>
+      <button class="tab-btn"        onclick="switchTab('points',this)">⭐ Original Points</button>
+    </div>
+
+    <!-- ═══ TASK REPORT ═══ -->
+    <div class="report-section active" id="tab-task">
+      <div class="card">
+        <div class="section-title">Task-wise Report</div>
+        <div class="filter-row">
+          <label>Task:</label>
+          <select id="t_task" style="flex:1;max-width:300px"></select>
+          <input type="date" id="t_from">
+          <label>to</label>
+          <input type="date" id="t_to">
+          <button class="btn btn-green" onclick="loadTaskReport()">View</button>
+        </div>
+      </div>
+
+      <div class="card" id="taskReportResult" style="display:none">
+        <div class="summary-row">
+          <div class="sum-box"><div class="sum-val" id="tr_voted">–</div><div class="sum-lbl">Voted</div></div>
+          <div class="sum-box"><div class="sum-val" id="tr_not">–</div><div class="sum-lbl">Not Voted</div></div>
+          <div class="sum-box"><div class="sum-val" id="tr_pct">–</div><div class="sum-lbl">Completion %</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="section-title" style="margin-bottom:0">Voted Users</div>
+          <button class="btn btn-csv" onclick="csvTaskReport()">⬇ CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Phone</th><th>Status</th></tr></thead>
+            <tbody id="tr_body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ USER REPORT ═══ -->
+    <div class="report-section" id="tab-user">
+      <div class="card">
+        <div class="section-title">User-wise Vote History</div>
+        <div class="filter-row">
+          <label>User:</label>
+          <select id="u_user" style="flex:1;max-width:220px"></select>
+          <input type="date" id="u_from">
+          <label>to</label>
+          <input type="date" id="u_to">
+          <button class="btn btn-green" onclick="loadUserReport()">View</button>
+          <button class="btn btn-csv" onclick="csvUserReport()">⬇ CSV</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="summary-row">
+          <div class="sum-box"><div class="sum-val" id="ur_days">–</div><div class="sum-lbl">Sessions</div></div>
+          <div class="sum-box"><div class="sum-val" id="ur_pts">–</div><div class="sum-lbl">Total Points</div></div>
+          <div class="sum-box"><div class="sum-val" id="ur_admin">–</div><div class="sum-lbl">Admin Added</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Points</th><th>Tasks</th><th>Source</th><th>Del</th></tr>
+            </thead>
+            <tbody id="ur_body">
+              <tr><td colspan="5" class="empty-msg">Select a user and click View</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ORIGINAL POINTS ═══ -->
+    <div class="report-section" id="tab-points">
+      <div class="card">
+        <div class="section-title">Original User Points (excludes admin-added)</div>
+        <div class="filter-row">
+          <input type="date" id="p_from">
+          <label>to</label>
+          <input type="date" id="p_to">
+          <button class="btn btn-green" onclick="loadPointsReport()">View</button>
+          <button class="btn btn-csv" onclick="csvPointsReport()">⬇ CSV</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>SL</th><th>Rank</th><th>Name</th><th>Phone</th><th>Points</th></tr>
+            </thead>
+            <tbody id="pr_body">
+              <tr><td colspan="5" class="empty-msg">Click View to load</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script type="module">
+import "./admin-nav.js";
+import { db } from "./firebase.js";
+import {
+  collection, getDocs, deleteDoc, doc, query, where
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+/* ── Cache ── */
+let allUsers = [];
+let allVotes = [];
+let allTasks = [];
+
+/* ── Init ── */
+async function init(){
+  const [usersSnap, votesSnap, tasksSnap] = await Promise.all([
+    getDocs(collection(db,"users")),
+    getDocs(collection(db,"votes")),
+    getDocs(collection(db,"tasks"))
+  ]);
+
+  usersSnap.forEach(d => allUsers.push({id:d.id,...d.data()}));
+  votesSnap.forEach(d => allVotes.push({id:d.id,...d.data()}));
+  tasksSnap.forEach(d => allTasks.push({id:d.id,...d.data()}));
+
+  // Populate task select
+  const tSel = document.getElementById("t_task");
+  tSel.innerHTML = "<option value=''>— Select task —</option>";
+  allTasks.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t.id;
+    opt.textContent = t.text;
+    tSel.appendChild(opt);
+  });
+
+  // Populate user select
+  const uSel = document.getElementById("u_user");
+  uSel.innerHTML = "";
+  allUsers.sort((a,b)=>(a.name||"").localeCompare(b.name||"")).forEach(u => {
+    const opt = document.createElement("option");
+    opt.value = u.phone;
+    opt.textContent = `${u.name} (${u.phone})`;
+    uSel.appendChild(opt);
+  });
+}
+init();
+
+/* ── Tab switching ── */
+window.switchTab = (tab, btn) => {
+  document.querySelectorAll(".report-section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-"+tab).classList.add("active");
+  btn.classList.add("active");
+};
+
+/* ════════════════════════════════════════════════
+   TASK REPORT
+════════════════════════════════════════════════ */
+window.loadTaskReport = () => {
+  const taskId = document.getElementById("t_task").value;
+  if(!taskId){ alert("Select a task first."); return; }
+
+  const from = document.getElementById("t_from").value;
+  const to   = document.getElementById("t_to").value;
+
+  // Find votes containing this task
+  const votedPhones = new Set();
+  allVotes.forEach(v => {
+    if(v.source === "admin") return;
+    if(from && v.date && v.date < from) return;
+    if(to   && v.date && v.date > to)   return;
+    const tasks = v.tasks || [];
+    if(tasks.some(t => t.id === taskId)) votedPhones.add(v.phone);
+  });
+
+  const body = document.getElementById("tr_body");
+  body.innerHTML = "";
+
+  let votedCount = 0, notCount = 0;
+  allUsers.forEach(u => {
+    const voted = votedPhones.has(u.phone);
+    if(voted) votedCount++; else notCount++;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="left">${escHtml(u.name)}</td>
+      <td>${u.phone}</td>
+      <td><span class="badge ${voted?"badge-voted":"badge-not"}">${voted?"✅ Voted":"❌ Not voted"}</span></td>
+    `;
+    body.appendChild(tr);
+  });
+
+  const total = votedCount + notCount;
+  document.getElementById("tr_voted").textContent = votedCount;
+  document.getElementById("tr_not").textContent   = notCount;
+  document.getElementById("tr_pct").textContent   = total ? Math.round(votedCount/total*100)+"%" : "–";
+  document.getElementById("taskReportResult").style.display = "block";
+};
+
+window.csvTaskReport = () => {
+  const taskId   = document.getElementById("t_task").value;
+  const taskName = allTasks.find(t=>t.id===taskId)?.text || taskId;
+  const rows     = [["Name","Phone","Status"]];
+  document.querySelectorAll("#tr_body tr").forEach(tr => {
+    const cells = tr.querySelectorAll("td");
+    rows.push([cells[0].textContent, cells[1].textContent, cells[2].textContent.trim()]);
+  });
+  downloadCSV(rows, `task-report-${taskName.replace(/\s+/g,"-")}.csv`);
+};
+
+/* ════════════════════════════════════════════════
+   USER REPORT
+════════════════════════════════════════════════ */
+window.loadUserReport = () => {
+  const phone = document.getElementById("u_user").value;
+  const from  = document.getElementById("u_from").value;
+  const to    = document.getElementById("u_to").value;
+
+  let rows = allVotes.filter(v => {
+    if(v.phone !== phone) return false;
+    if(from && v.date && v.date < from) return false;
+    if(to   && v.date && v.date > to)   return false;
+    return true;
+  });
+  rows.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+  let totalPts = 0, adminPts = 0;
+  const body = document.getElementById("ur_body");
+  body.innerHTML = "";
+
+  if(rows.length === 0){
+    body.innerHTML = `<tr><td colspan="5" class="empty-msg">No votes found for this filter.</td></tr>`;
+  } else {
+    rows.forEach(v => {
+      const isAdmin = v.source === "admin";
+      totalPts += Number(v.points||0);
+      if(isAdmin) adminPts += Number(v.points||0);
+      const tasksLabel = (v.tasks||[]).map(t=>t.text).join(", ") || (isAdmin?"Admin added":"–");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${v.date||"–"}</td>
+        <td><b>${v.points||0}</b></td>
+        <td class="left" style="font-size:12px">${escHtml(tasksLabel)}</td>
+        <td><span class="badge ${isAdmin?"badge-admin":"badge-voted"}">${isAdmin?"Admin":"User"}</span></td>
+        <td><button class="btn-del" onclick="delVote('${v.id}')">✕</button></td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  document.getElementById("ur_days").textContent  = rows.length;
+  document.getElementById("ur_pts").textContent   = totalPts;
+  document.getElementById("ur_admin").textContent = adminPts;
+};
+
+window.delVote = async (id) => {
+  if(!confirm("Delete this vote record?")) return;
+  await deleteDoc(doc(db,"votes",id));
+  const idx = allVotes.findIndex(v=>v.id===id);
+  if(idx !== -1) allVotes.splice(idx,1);
+  loadUserReport();
+};
+
+window.csvUserReport = () => {
+  const phone    = document.getElementById("u_user").value;
+  const userName = allUsers.find(u=>u.phone===phone)?.name || phone;
+  const rows     = [["Date","Points","Tasks","Source"]];
+  document.querySelectorAll("#ur_body tr").forEach(tr => {
+    const cells = tr.querySelectorAll("td");
+    if(cells.length >= 4){
+      rows.push([cells[0].textContent,cells[1].textContent,cells[2].textContent.trim(),cells[3].textContent.trim()]);
+    }
+  });
+  downloadCSV(rows, `user-report-${userName.replace(/\s+/g,"-")}.csv`);
+};
+
+/* ════════════════════════════════════════════════
+   ORIGINAL POINTS (exclude admin-added)
+════════════════════════════════════════════════ */
+window.loadPointsReport = () => {
+  const from = document.getElementById("p_from").value;
+  const to   = document.getElementById("p_to").value;
+
+  const ptMap = {};
+  allVotes.forEach(v => {
+    if(v.source === "admin") return; // exclude admin-added
+    if(from && v.date && v.date < from) return;
+    if(to   && v.date && v.date > to)   return;
+    ptMap[v.phone] = (ptMap[v.phone]||0) + Number(v.points||0);
+  });
+
+  let rows = allUsers
+    .filter(u => ptMap[u.phone] !== undefined)
+    .map(u => ({ name:u.name, phone:u.phone, pts:ptMap[u.phone]||0 }));
+
+  rows.sort((a,b)=>b.pts-a.pts);
+
+  const body = document.getElementById("pr_body");
+  body.innerHTML = "";
+  let sl=0, rank=0, prev=null;
+
+  rows.forEach(r => {
+    sl++;
+    if(prev===null || r.pts < prev) rank++;
+    prev = r.pts;
+    const cls = rank===1?"rank1":rank===2?"rank2":rank===3?"rank3":"";
+    const tr  = document.createElement("tr");
+    tr.className = cls;
+    tr.innerHTML = `<td>${sl}</td><td>${rank}</td><td class="left">${escHtml(r.name)}</td><td>${r.phone}</td><td><b>${r.pts}</b></td>`;
+    body.appendChild(tr);
+  });
+
+  if(rows.length === 0){
+    body.innerHTML = `<tr><td colspan="5" class="empty-msg">No votes found for this filter.</td></tr>`;
+  }
+};
+
+window.csvPointsReport = () => {
+  const rows = [["SL","Rank","Name","Phone","Points"]];
+  document.querySelectorAll("#pr_body tr").forEach(tr => {
+    const cells = tr.querySelectorAll("td");
+    if(cells.length >= 5){
+      rows.push([cells[0].textContent,cells[1].textContent,cells[2].textContent,cells[3].textContent,cells[4].textContent]);
+    }
+  });
+  downloadCSV(rows, `original-points-report.csv`);
+};
+
+/* ── CSV helper ── */
+function downloadCSV(rows, filename){
+  const csv  = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+</script>
+</body>
+</html>
