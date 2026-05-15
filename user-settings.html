@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings | Faith &amp; Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ecebf4;--surface:#ecebf4;--lit:#ffffff;--shade:#b8b9c8;
+  --ink:#2a2c3e;--ink-soft:#6b6d82;--ink-mute:#9a9cb0;
+  --clay-peach:#ffc89a;--clay-yellow:#ffe08a;--clay-mint:#a8e6cf;
+  --clay-sky:#a8c8ff;--clay-lilac:#c5b3ff;--clay-rose:#ff9eb3;
+  --accent:#6c5ce7;--accent-soft:#b8aeff;
+  --r-lg:28px;--r-md:20px;--r-sm:14px;
+  --neu-out:14px 14px 30px var(--shade),-14px -14px 30px var(--lit);
+  --neu-out-sm:8px 8px 18px var(--shade),-8px -8px 18px var(--lit);
+  --neu-in:inset 8px 8px 18px var(--shade),inset -8px -8px 18px var(--lit);
+  --neu-in-sm:inset 4px 4px 10px var(--shade),inset -4px -4px 10px var(--lit);
+  --neu-press:inset 6px 6px 14px var(--shade),inset -6px -6px 14px var(--lit);
+  --clay-shadow:inset 0 -8px 0 rgba(60,30,80,.10),inset 0 8px 0 rgba(255,255,255,.65);
+  /* green nav tokens */
+  --green-deep:#0d4a28;--green-mid:#1c7a3e;--green-leaf:#72b534;
+  --green-wash:#dff0d0;--paper-mint:#dff0d6;--paper:#ffffff;
+  --paper-2:#f6faf4;--paper-3:#edf5e8;--line:#d6e5d8;--ink-2:#2a3d30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);min-height:100vh}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:78px;-webkit-font-smoothing:antialiased}
+
+/* ── App nav ── */
+.app-nav{position:fixed;z-index:200;bottom:0;left:0;right:0;background:var(--surface);box-shadow:0 -6px 24px rgba(184,185,200,.55),0 -1px 0 rgba(255,255,255,.9);display:flex;padding:6px 8px max(8px,env(safe-area-inset-bottom))}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink-mute);gap:3px;padding:6px 4px 4px;border-radius:14px;transition:all .2s}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.nav-item span{font-size:10px;font-weight:600;letter-spacing:.3px}
+.nav-item.active{color:var(--green-mid);background:linear-gradient(160deg,rgba(114,181,52,.12),rgba(28,122,62,.08));box-shadow:var(--neu-in-sm)}
+.nav-item.active svg{transform:scale(1.15);stroke:var(--green-mid)}
+
+
+/* ── Top bar ── */
+.top-bar{background:var(--surface);padding:18px 22px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 rgba(0,0,0,.04),0 14px 30px -20px rgba(120,120,160,.25)}
+.top-bar-inner{flex:1}
+.top-bar-eyebrow{font-size:10px;letter-spacing:3px;color:var(--ink-mute);text-transform:uppercase;font-weight:700;margin-bottom:2px}
+.top-bar-title{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-0.5px;color:var(--ink)}
+.icon-btn{width:38px;height:38px;border-radius:14px;border:0;background:var(--surface);box-shadow:var(--neu-out-sm);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);text-decoration:none;transition:all .2s;flex-shrink:0;font-size:15px}
+.icon-btn:hover{color:var(--ink)}
+.icon-btn:active{box-shadow:var(--neu-press)}
+
+/* ── Page ── */
+.page{max-width:820px;margin:0 auto;padding:26px 18px 48px}
+
+/* ── Settings grid ── */
+
+
+
+/* ── Side nav ── */
+
+@media(max-width:860px){}
+
+@media(max-width:860px){}
+
+
+
+.c1{background:linear-gradient(160deg,var(--clay-lilac),#8a7aff)}
+.c2{background:linear-gradient(160deg,var(--clay-mint),#6cd0a1)}
+.c3{background:linear-gradient(160deg,var(--clay-sky),#8aafff)}
+.c4{background:linear-gradient(160deg,var(--clay-rose),#ff5a7a)}
+
+/* ── Sections column ── */
+
+
+/* ── Card ── */
+.st-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px}
+
+.st-eyebrow{font-size:10px;letter-spacing:3px;color:var(--ink-mute);text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.st-card-h{font-family:'Fraunces',serif;font-weight:700;font-size:20px;letter-spacing:-.3px;margin-bottom:2px}
+.st-card-sub{color:var(--ink-soft);font-size:12.5px;margin-bottom:20px}
+
+/* ── Account hero ── */
+.st-acct{
+  display:flex;align-items:center;gap:18px;
+  padding:18px;margin-bottom:16px;
+  border-radius:var(--r-md);
+  background:var(--surface);box-shadow:var(--neu-in-sm);
+  position:relative;overflow:hidden;
+}
+.st-acct::before{
+  content:"";position:absolute;right:-28px;top:-28px;
+  width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,var(--clay-lilac),transparent 60%);
+  opacity:.22;pointer-events:none;
+}
+.st-avatar{
+  width:74px;height:74px;border-radius:50%;
+  display:grid;place-items:center;font-size:34px;
+  background:linear-gradient(160deg,var(--clay-lilac),var(--accent-soft));
+  box-shadow:var(--clay-shadow),8px 10px 20px rgba(60,30,140,.22);
+  flex-shrink:0;position:relative;z-index:1;
+}
+.st-acct-info{position:relative;z-index:1;min-width:0}
+.st-acct-name{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-phone-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.st-phone-ico{
+  width:34px;height:34px;border-radius:11px;
+  display:grid;place-items:center;font-size:15px;
+  box-shadow:var(--clay-shadow),3px 4px 8px rgba(0,0,0,.10);
+  flex-shrink:0;
+}
+.st-phone-lbl{font-size:9px;letter-spacing:2px;color:var(--ink-mute);text-transform:uppercase;font-weight:700}
+.st-phone-val{font-weight:700;font-size:15px;margin-top:2px}
+
+/* ── Tier placeholder ── */
+.st-tier{
+  background:linear-gradient(160deg,var(--clay-lilac),var(--accent-soft));
+  color:#2a1d6a;border-radius:var(--r-md);padding:15px 18px;
+  box-shadow:var(--clay-shadow),10px 12px 24px rgba(108,92,231,.22);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:relative;overflow:hidden;
+}
+.st-tier::before{content:"";position:absolute;right:-18px;bottom:-18px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.35),transparent 60%)}
+.st-tier-info{position:relative;z-index:1}
+.st-tier-eye{font-size:9px;letter-spacing:2.5px;font-weight:700;opacity:.7;text-transform:uppercase}
+.st-tier-h{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-top:3px}
+.st-tier-badge{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.38);display:grid;place-items:center;font-size:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 10px rgba(0,0,0,.12);position:relative;z-index:1}
+
+/* ── Setting row ── */
+.st-row{
+  display:grid;grid-template-columns:44px 1fr auto;
+  gap:14px;align-items:center;
+  padding:13px 15px;border-radius:var(--r-md);
+  background:var(--surface);box-shadow:var(--neu-out-sm);
+  transition:all .2s;
+}
+.st-row+.st-row{margin-top:10px}
+.st-row-ico{
+  width:44px;height:44px;border-radius:14px;
+  display:grid;place-items:center;font-size:18px;
+  box-shadow:var(--clay-shadow),4px 5px 10px rgba(0,0,0,.10);
+}
+.r-c1{background:linear-gradient(160deg,var(--clay-sky),#8aafff)}
+.r-c2{background:linear-gradient(160deg,var(--clay-yellow),#ffc24a)}
+.r-c3{background:linear-gradient(160deg,var(--clay-rose),#ff5a7a)}
+.r-c4{background:linear-gradient(160deg,var(--clay-mint),#6cd0a1)}
+.r-c5{background:linear-gradient(160deg,var(--clay-lilac),#8a7aff)}
+.r-c6{background:linear-gradient(160deg,var(--clay-peach),#ffa074)}
+.st-row-title{font-weight:700;font-size:14px}
+.st-row-sub{color:var(--ink-soft);font-size:12px;margin-top:2px}
+
+/* ── Select ── */
+.st-select{
+  border:0;outline:0;font:inherit;font-weight:600;font-size:13px;
+  background:var(--surface);color:var(--ink);
+  padding:10px 36px 10px 15px;border-radius:999px;
+  box-shadow:var(--neu-in-sm);cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6d82' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;background-position:right 13px center;
+}
+
+/* ── Toggle ── */
+.st-toggle{
+  --w:52px;--h:30px;
+  position:relative;width:var(--w);height:var(--h);
+  border-radius:999px;background:var(--surface);
+  box-shadow:var(--neu-in-sm);cursor:pointer;border:0;
+  transition:all .25s;flex-shrink:0;
+}
+.st-toggle::after{
+  content:"";position:absolute;
+  top:3px;left:3px;
+  width:calc(var(--h) - 6px);height:calc(var(--h) - 6px);
+  border-radius:50%;
+  background:linear-gradient(160deg,#fff,#d8d9e8);
+  box-shadow:var(--clay-shadow),2px 3px 6px rgba(0,0,0,.18);
+  transition:all .3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.st-toggle.on{box-shadow:inset 2px 2px 5px rgba(60,40,140,.15);background:linear-gradient(160deg,var(--clay-lilac),var(--accent))}
+.st-toggle.on::after{left:calc(var(--w) - var(--h) + 3px);background:linear-gradient(160deg,#fff,#f3f0ff)}
+
+/* ── Fields ── */
+.st-field{margin-bottom:13px}
+.st-field label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--ink-mute);text-transform:uppercase;margin-bottom:6px}
+.st-input{
+  width:100%;border:0;outline:0;font:inherit;font-size:14px;
+  background:var(--surface);color:var(--ink);
+  padding:13px 16px;border-radius:var(--r-sm);
+  box-shadow:var(--neu-in-sm);transition:box-shadow .2s;
+}
+.st-input:focus{box-shadow:var(--neu-in-sm),0 0 0 2px var(--accent-soft)}
+.st-pw-msg{font-size:12px;color:#c0392b;margin-top:8px;min-height:16px}
+
+/* ── Buttons ── */
+.st-btn{
+  width:100%;border:0;cursor:pointer;padding:14px 18px;
+  border-radius:var(--r-md);font:inherit;font-weight:700;font-size:14px;
+  background:var(--surface);color:var(--ink);
+  box-shadow:var(--neu-out-sm);transition:all .2s;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.st-btn:active{box-shadow:var(--neu-press)}
+.st-btn.primary{
+  background:linear-gradient(160deg,var(--accent-soft),var(--accent));
+  color:#fff;
+  box-shadow:var(--clay-shadow),6px 8px 16px rgba(108,92,231,.35);
+}
+.st-btn.primary:active{box-shadow:var(--clay-shadow),inset 4px 4px 10px rgba(60,30,140,.3)}
+.st-btn.danger{
+  background:linear-gradient(160deg,#ffc89a,var(--clay-peach));
+  color:#5a2200;
+  box-shadow:var(--clay-shadow),6px 8px 16px rgba(180,90,30,.28);
+}
+.st-btn.danger:active{box-shadow:var(--clay-shadow),inset 4px 4px 10px rgba(140,60,10,.3)}
+.st-actions{margin-top:18px}
+
+/* ── Divider ── */
+.st-divider{height:1px;background:linear-gradient(90deg,transparent,var(--shade),transparent);margin:24px 0;opacity:.45}
+
+
+const ST_TIERS=[
+  {name:"Seedling",emoji:"🌱",min:0,max:50},
+  {name:"Sprout",emoji:"🌿",min:50,max:100},
+  {name:"Grower",emoji:"🍃",min:100,max:250},
+  {name:"Seeker",emoji:"🌸",min:250,max:500},
+  {name:"Devotee",emoji:"⭐",min:500,max:1000},
+  {name:"Guardian",emoji:"⚡",min:1000,max:2000},
+  {name:"Champion",emoji:"🏆",min:2000,max:3000},
+  {name:"Legend",emoji:"💎",min:3000,max:5000},
+  {name:"Ascendant",emoji:"👑",min:5000,max:Infinity},
+];
+function getStTier(pts){return ST_TIERS.find(t=>pts>=t.min&&pts<t.max)||ST_TIERS[ST_TIERS.length-1];}
+/* ── Toast ── */
+.st-toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(40px);
+  background:var(--surface);color:var(--ink);
+  padding:12px 22px;border-radius:999px;box-shadow:var(--neu-out);
+  font-weight:600;font-size:13px;
+  display:flex;align-items:center;gap:10px;
+  opacity:0;pointer-events:none;
+  transition:all .35s cubic-bezier(0.34,1.56,0.64,1);z-index:60;
+}
+@media(min-width:768px){.st-toast{bottom:28px}}
+.st-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.st-toast-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(160deg,var(--clay-mint),#6cd0a1);box-shadow:var(--clay-shadow)}
+
+@media(max-width:540px){
+  .st-row{grid-template-columns:40px 1fr auto;padding:11px 12px}
+  .st-row-ico{width:40px;height:40px}
+  .st-avatar{width:64px;height:64px;font-size:28px}
+}
+
+.st-admin-btn{display:none;width:100%;margin-top:14px;padding:13px 18px;border-radius:var(--r-sm);border:0;cursor:pointer;font:inherit;font-size:14px;font-weight:700;background:linear-gradient(160deg,var(--clay-lilac),#8a7aff);color:#fff;box-shadow:var(--clay-shadow),6px 8px 16px rgba(108,92,231,.35);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.st-admin-btn.visible{display:flex}
+.st-admin-btn:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="top-bar-eyebrow">My Account</div>
+    <div class="top-bar-title">Settings</div>
+  </div>
+  <a href="user-profile.html" class="icon-btn" aria-label="Back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+  </a>
+</div>
+
+<!-- Page -->
+<div class="page">
+  <div class="st-sections" style="max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:22px">
+
+      <!-- ── Account ── -->
+      <section class="st-card" id="account">
+        <div class="st-eyebrow">Account</div>
+        <div class="st-card-h">Who you are</div>
+        <div class="st-card-sub">Your identity across the app</div>
+
+        <div class="st-acct">
+          <div class="st-avatar" id="stAvatar">👤</div>
+          <div class="st-acct-info">
+            <div class="st-acct-name" id="stName">—</div>
+            <div class="st-phone-row">
+              <div class="st-phone-ico r-c1">📱</div>
+              <div>
+                <div class="st-phone-lbl">Phone</div>
+                <div class="st-phone-val" id="stPhone">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="st-tier" id="stTierCard">
+          <div class="st-tier-info">
+            <div class="st-tier-eye">Current Tier</div>
+            <div class="st-tier-h" id="stTierName">—</div>
+          </div>
+          <div class="st-tier-badge" id="stTierBadge">🌱</div>
+        </div>
+        <button class="st-admin-btn" id="adminSwitchBtn" onclick="window.switchToAdmin()">
+          🔐 Switch to Admin Dashboard
+        </button>
+      </section>
+
+      <!-- ── Preferences ── -->
+      <section class="st-card" id="preferences">
+        <div class="st-eyebrow">Preferences</div>
+        <div class="st-card-h">How it feels</div>
+        <div class="st-card-sub">Personalise your experience</div>
+
+        <div class="st-row">
+          <div class="st-row-ico r-c1">🌐</div>
+          <div>
+            <div class="st-row-title">Language</div>
+            <div class="st-row-sub">Choose your display language</div>
+          </div>
+          <select class="st-select" id="sel_lang">
+            <option value="en">English</option>
+            <option value="ma">Malayalam</option>
+          </select>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-ico r-c5">🎨</div>
+          <div>
+            <div class="st-row-title">Theme</div>
+            <div class="st-row-sub">Light, dark or follow system</div>
+          </div>
+          <select class="st-select" id="sel_theme">
+            <option>System</option>
+            <option>Light</option>
+            <option>Dark</option>
+          </select>
+        </div>
+
+        <div class="st-actions">
+          <button class="st-btn primary" id="savePrefsBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Save preferences
+          </button>
+        </div>
+      </section>
+
+      <!-- ── Notifications ── -->
+      <section class="st-card" id="notifications">
+        <div class="st-eyebrow">Notifications</div>
+        <div class="st-card-h">What you hear about</div>
+        <div class="st-card-sub">Toggle reminders and alerts</div>
+
+        <div class="st-row">
+          <div class="st-row-ico r-c2">⏰</div>
+          <div>
+            <div class="st-row-title">Daily reminder</div>
+            <div class="st-row-sub">Get reminded before the voting window closes</div>
+          </div>
+          <button class="st-toggle on" data-toggle aria-pressed="true"></button>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-ico r-c1">📣</div>
+          <div>
+            <div class="st-row-title">Push notifications</div>
+            <div class="st-row-sub">Push when your reminder fires</div>
+          </div>
+          <button class="st-toggle on" data-toggle aria-pressed="true"></button>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-ico r-c3">🔥</div>
+          <div>
+            <div class="st-row-title">Streak warnings</div>
+            <div class="st-row-sub">Heads up before you lose a streak</div>
+          </div>
+          <button class="st-toggle on" data-toggle aria-pressed="true"></button>
+        </div>
+      </section>
+
+      <!-- ── Security ── -->
+      <section class="st-card" id="security">
+        <div class="st-eyebrow">Security</div>
+        <div class="st-card-h">Change password</div>
+        <div class="st-card-sub">Keep your account safe</div>
+
+        <div class="st-field">
+          <label>Current password</label>
+          <input class="st-input" type="password" id="pw_current" placeholder="Enter current password" autocomplete="current-password">
+        </div>
+        <div class="st-field">
+          <label>New password</label>
+          <input class="st-input" type="password" id="pw_new" placeholder="Min 4 characters" autocomplete="new-password">
+        </div>
+        <div class="st-field">
+          <label>Confirm new password</label>
+          <input class="st-input" type="password" id="pw_confirm" placeholder="Repeat new password" autocomplete="new-password">
+        </div>
+        <div class="st-pw-msg" id="pwMsg"></div>
+
+        <div class="st-actions">
+          <button class="st-btn primary" id="savePwBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Update password
+          </button>
+        </div>
+      </section>
+
+      <!-- ── Danger Zone ── -->
+      <section class="st-card" id="danger">
+        <div class="st-eyebrow" style="color:#b03030">Danger Zone</div>
+        <div class="st-card-h">Sign out</div>
+        <div class="st-card-sub">Signing out removes your session from this device</div>
+
+        <div class="st-actions" style="margin-top:0">
+          <button class="st-btn danger" id="signOutBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign out of this device
+          </button>
+        </div>
+      </section>
+
+  </div><!-- /st-sections -->
+</div><!-- /page -->
+
+<!-- Toast -->
+<div class="st-toast" id="stToast">
+  <span class="st-toast-dot" id="stToastDot"></span>
+  <span id="stToastMsg">Saved</span>
+</div>
+
+<!-- App nav -->
+<nav class="app-nav">
+  <a href="user-home.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="user-leaderboard.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><rect x="2" y="14" width="4" height="7" rx="1"/><rect x="9" y="9" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg>
+    <span>Leaderboard</span>
+  </a>
+  <a href="user-resources.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <span>Library</span>
+  </a>
+  <a href="user-profile.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span>Profile</span>
+  </a>
+</nav>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { t, getLang, setLang, applyLang } from "./lang.js";
+import { collection, query, where, getDocs, getDoc, updateDoc, doc }
+  from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const AVATARS = ["🦁","🐯","🐻","🦊","🐺","🦅","🦋","🌸","⚡","🌊","🔥","🌙","⭐","🌿","🎯","🏔️","🌺","🦄","🐉","🎸","🚀","💎"];
+
+const phone = localStorage.getItem("ff_phone");
+if (!phone) location.replace("login.html");
+
+if (typeof applyLang === "function") applyLang();
+
+let userDocId = null;
+
+
+const ST_TIERS=[
+  {name:"Seedling",emoji:"🌱",min:0,max:50},
+  {name:"Sprout",emoji:"🌿",min:50,max:100},
+  {name:"Grower",emoji:"🍃",min:100,max:250},
+  {name:"Seeker",emoji:"🌸",min:250,max:500},
+  {name:"Devotee",emoji:"⭐",min:500,max:1000},
+  {name:"Guardian",emoji:"⚡",min:1000,max:2000},
+  {name:"Champion",emoji:"🏆",min:2000,max:3000},
+  {name:"Legend",emoji:"💎",min:3000,max:5000},
+  {name:"Ascendant",emoji:"👑",min:5000,max:Infinity},
+];
+function getStTier(pts){return ST_TIERS.find(t=>pts>=t.min&&pts<t.max)||ST_TIERS[ST_TIERS.length-1];}
+/* ── Toast ─────────────────────────────────────────── */
+const toast    = document.getElementById("stToast");
+const toastDot = document.getElementById("stToastDot");
+const toastMsg = document.getElementById("stToastMsg");
+let toastTimer;
+function showToast(msg, err=false) {
+  toastMsg.textContent = msg;
+  toastDot.style.background = err
+    ? "linear-gradient(160deg,var(--clay-rose),#ff5a7a)"
+    : "linear-gradient(160deg,var(--clay-mint),#6cd0a1)";
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove("show"), 2000);
+}
+
+
+
+/* ── Toggle buttons (design-only) ─────────────────── */
+document.querySelectorAll("[data-toggle]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const on = btn.classList.toggle("on");
+    btn.setAttribute("aria-pressed", on?"true":"false");
+  });
+});
+
+/* ── Load user data ─────────────────────────────────── */
+async function loadUser() {
+  try {
+    const q = query(collection(db,"users"), where("phone","==",phone));
+    const snap = await getDocs(q);
+    if (snap.empty) return;
+    userDocId = snap.docs[0].id;
+    const u = snap.docs[0].data();
+    const uData = u.userData || {};
+
+    const name = uData.name || u.name || localStorage.getItem("ff_name") || "—";
+    document.getElementById("stName").textContent = name;
+    document.getElementById("stPhone").textContent = phone;
+
+    const AV_MAP={"avatar-default":"🧑","avatar-star":"⭐","avatar-fire":"🔥","avatar-crown":"👑","avatar-gem":"💎","avatar-leaf":"🌿","avatar-moon":"🌙","avatar-sun":"☀️"};
+    const avId = uData.avatarId || u.avatarId || localStorage.getItem("ff_avatar_id") || "avatar-default";
+    const avBg = uData.avatarBg || u.avatarBg || "";
+    const stAv = document.getElementById("stAvatar");
+    stAv.textContent = AV_MAP[avId] || "👤";
+    if(avBg) stAv.style.background = avBg;
+
+    const pts = uData.totalPoints||u.totalPoints||0;
+    const stTier = getStTier(pts);
+    const stTierNameEl = document.getElementById("stTierName");
+    const stTierBadgeEl = document.getElementById("stTierBadge");
+    if(stTierNameEl) stTierNameEl.textContent = stTier.name+" · "+pts+" pts";
+    if(stTierBadgeEl) stTierBadgeEl.textContent = stTier.emoji;
+
+    const lang = u.language || localStorage.getItem("ff_lang") || "en";
+    const sel = document.getElementById("sel_lang");
+    if ([...sel.options].some(o=>o.value===lang)) sel.value = lang;
+    localStorage.setItem("ff_lang", lang);
+
+  } catch(e) { console.error("Settings load:", e); }
+}
+loadUser();
+
+/* ── Language live preview ──────────────────────────── */
+document.getElementById("sel_lang").addEventListener("change", e=>{
+  localStorage.setItem("ff_lang", e.target.value);
+  if (typeof applyLang==="function") applyLang(e.target.value);
+});
+
+/* ── Save preferences ───────────────────────────────── */
+document.getElementById("savePrefsBtn").addEventListener("click", async ()=>{
+  if (!userDocId) { showToast("Still loading…", true); return; }
+  const language = document.getElementById("sel_lang").value;
+  try {
+    await updateDoc(doc(db,"users",userDocId), { language });
+    if (typeof setLang==="function") await setLang(language);
+    localStorage.setItem("ff_lang", language);
+    showToast("Preferences saved ✓");
+  } catch(e) { console.error(e); showToast("Couldn't save", true); }
+});
+
+/* ── Change password ────────────────────────────────── */
+document.getElementById("savePwBtn").addEventListener("click", async ()=>{
+  const msgEl  = document.getElementById("pwMsg");
+  const current = document.getElementById("pw_current").value.trim();
+  const newPw   = document.getElementById("pw_new").value.trim();
+  const confirm = document.getElementById("pw_confirm").value.trim();
+  msgEl.textContent = "";
+
+  if (!current || !newPw || !confirm) { msgEl.textContent="Please fill in all fields."; return; }
+  if (newPw.length < 4)               { msgEl.textContent="New password must be at least 4 characters."; return; }
+  if (newPw !== confirm)              { msgEl.textContent="New passwords don't match."; return; }
+  if (!userDocId)                     { msgEl.textContent="Not loaded yet, try again."; return; }
+
+  try {
+    const snap = await getDoc(doc(db,"users",userDocId));
+    if (!snap.exists() || snap.data().password !== current) {
+      msgEl.textContent = "Current password is incorrect."; return;
+    }
+    await updateDoc(doc(db,"users",userDocId), { password: newPw });
+    ["pw_current","pw_new","pw_confirm"].forEach(id=>document.getElementById(id).value="");
+    showToast("Password updated ✓");
+  } catch(e) { console.error(e); msgEl.textContent="Error updating password."; }
+});
+
+/* ── Sign out ───────────────────────────────────────── */
+document.getElementById("signOutBtn").addEventListener("click", ()=>{
+  ["ff_phone","ff_role","ff_name","ff_avatar_id","ff_lb_users","ff_lb_votes","ff_lb_ts","ff_lang"]
+    .forEach(k=>localStorage.removeItem(k));
+  location.replace("login.html");
+});
+
+window.switchToAdmin = () => location.replace("admin-dashboard.html");
+(function(){
+  const r = localStorage.getItem("ff_role");
+  if(r === "admin" || r === "superadmin"){
+    const b = document.getElementById("adminSwitchBtn");
+    if(b) b.classList.add("visible");
+  }
+})();
+</script>
+</body>
+</html>
