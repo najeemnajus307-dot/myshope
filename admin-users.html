@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Users | Faith &amp; Fitness</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;min-height:100vh}
+.wrap{display:flex;min-height:100vh}
+#adminSidebar{flex-shrink:0}
+.main{flex:1;padding:20px;overflow-x:hidden}
+
+.page-title{font-size:20px;font-weight:bold;color:#14532d;margin-bottom:18px}
+.card{background:#fff;border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* Filter / sort bar */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filter-bar input,.filter-bar select{
+  padding:7px 10px;border:1.5px solid #e2e8f0;
+  border-radius:7px;font-size:13px;outline:none;background:#fff;
+}
+.filter-bar input:focus,.filter-bar select:focus{border-color:#16a34a}
+.filter-bar input[type=search]{flex:1;min-width:180px}
+
+/* Table */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:center;font-size:13px}
+th{background:#14532d;color:#fff;white-space:nowrap}
+tr:nth-child(even) td{background:#f8fafc}
+td.name-cell{text-align:left;font-weight:bold}
+.banned-row td{background:#fee2e2!important;color:#991b1b}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold}
+.badge-user{background:#dcfce7;color:#16a34a}
+.badge-admin{background:#dbeafe;color:#1d4ed8}
+.badge-super{background:#fde047;color:#713f12}
+.badge-banned{background:#fee2e2;color:#dc2626}
+.badge-free{background:#dcfce7;color:#15803d}
+.badge-engaged{background:#dcfce7;color:#15803d}
+.badge-dormant{background:#f1f5f9;color:#94a3b8}
+
+.btn-sm{padding:4px 10px;border:none;border-radius:5px;font-size:12px;font-weight:bold;cursor:pointer}
+.btn-edit{background:#0284c7;color:#fff}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:300;padding:20px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#fff;border-radius:12px;width:100%;max-width:420px;padding:22px;max-height:90vh;overflow-y:auto}
+.modal-box h3{font-size:16px;color:#14532d;margin-bottom:16px}
+.field-row{margin-bottom:10px}
+.field-label{font-size:12px;font-weight:bold;color:#475569;display:block;margin-bottom:4px}
+.field-row input,.field-row select{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:14px;outline:none}
+.field-row input:focus,.field-row select:focus{border-color:#16a34a}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+.modal-actions button{flex:1;padding:10px;border:none;border-radius:7px;font-size:14px;font-weight:bold;cursor:pointer}
+.btn-cancel{background:#f1f5f9;color:#475569}
+.btn-save-modal{background:#16a34a;color:#fff}
+.modal-divider{border:none;border-top:1px solid #e2e8f0;margin:14px 0}
+.modal-section-title{font-size:11px;font-weight:bold;letter-spacing:.7px;color:#94a3b8;text-transform:uppercase;margin-bottom:10px}
+
+.role-btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.role-btn{padding:7px 14px;border:none;border-radius:7px;font-size:13px;font-weight:bold;cursor:pointer}
+.role-btn-promote{background:#7c3aed;color:#fff}
+.role-btn-demote{background:#ea580c;color:#fff}
+.role-btn-ban{background:#dc2626;color:#fff}
+.role-btn-unban{background:#16a34a;color:#fff}
+
+.ban-pw-wrap{margin-top:8px}
+.ban-pw-wrap input{width:100%;padding:9px 12px;border:1.5px solid #dc2626;border-radius:7px;font-size:14px;outline:none}
+
+.user-count{font-size:13px;color:#64748b;margin-bottom:10px}
+.save-msg{font-size:13px;text-align:center;color:#16a34a;margin-top:8px;min-height:18px}
+.err-msg{color:#dc2626}
+
+@media(max-width:700px){.wrap{flex-direction:column}}
+</style>
+<!-- OneSignal Push Notifications -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "05d57d24-d6bc-40ab-8549-ea6dcf506070",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: { enable: true },
+    });
+  });
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div id="adminSidebar"></div>
+  <main class="main">
+    <div class="page-title">👥 User Management</div>
+    <div class="card">
+      <div class="filter-bar">
+        <input type="search" id="searchInput" placeholder="🔍 Search name or phone…" oninput="renderTable()">
+        <select id="sortSelect" onchange="renderTable()">
+          <option value="points_desc">Points ↓</option>
+          <option value="points_asc">Points ↑</option>
+          <option value="streak_desc">Streak ↓</option>
+          <option value="name_asc">Name A–Z</option>
+          <option value="join_desc">Newest first</option>
+          <option value="join_asc">Oldest first</option>
+        </select>
+        <select id="filterRole" onchange="renderTable()">
+          <option value="">All roles</option>
+          <option value="user">Users</option>
+          <option value="admin">Admins</option>
+        </select>
+        <select id="filterStatus" onchange="renderTable()">
+          <option value="">All status</option>
+          <option value="active">Active (not banned)</option>
+          <option value="banned">Banned</option>
+        </select>
+        <select id="filterEngagement" onchange="renderTable()">
+          <option value="">All engagement</option>
+          <option value="engaged">Engaged (voted last 10d)</option>
+          <option value="dormant">Dormant</option>
+        </select>
+      </div>
+      <div class="user-count" id="userCount">Loading…</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Points</th>
+              <th>Streak</th>
+              <th>Status</th>
+              <th>Engagement</th>
+              <th>Joined</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody id="userBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ── Edit User Modal ── -->
+<div class="modal-overlay hidden" id="editModal">
+  <div class="modal-box">
+    <h3 id="editModalTitle">Edit User</h3>
+
+    <div class="field-row">
+      <label class="field-label">Name</label>
+      <input type="text" id="em_name">
+    </div>
+    <div class="field-row">
+      <label class="field-label">Phone</label>
+      <input type="text" id="em_phone" disabled style="background:#f8fafc;color:#94a3b8;cursor:not-allowed">
+    </div>
+    <div class="field-row">
+      <label class="field-label">Date of Birth</label>
+      <input type="date" id="em_dob">
+    </div>
+    <div class="field-row" id="pwFieldRow">
+      <label class="field-label">Reset Password (leave blank to keep current)</label>
+      <input type="password" id="em_pass" placeholder="New password…">
+    </div>
+
+    <!-- Role section -->
+    <hr class="modal-divider">
+    <div class="modal-section-title">Role Management</div>
+    <div id="roleInfo" style="font-size:13px;color:#475569;margin-bottom:8px"></div>
+    <div class="role-btn-row" id="roleBtnRow"></div>
+
+    <!-- Ban section (superadmin only) -->
+    <div id="banSection" style="display:none">
+      <hr class="modal-divider">
+      <div class="modal-section-title">Ban / Unban</div>
+      <div id="banInfo" style="font-size:13px;color:#475569;margin-bottom:8px"></div>
+      <div class="ban-pw-wrap" id="banPwWrap" style="display:none">
+        <label class="field-label" style="color:#dc2626">Ban Password (required)</label>
+        <input type="password" id="banPwInput" placeholder="Enter ban password…">
+      </div>
+      <div class="role-btn-row" id="banBtnRow" style="margin-top:8px"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEdit()">Cancel</button>
+      <button class="btn-save-modal" onclick="saveEdit()">Save Changes</button>
+    </div>
+    <div class="save-msg" id="editMsg"></div>
+  </div>
+</div>
+
+<script type="module">
+import "./admin-nav.js";
+import { db } from "./firebase.js";
+import {
+  collection, getDocs, getDoc, updateDoc, doc
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const myRole  = localStorage.getItem("ff_role");
+const myPhone = localStorage.getItem("ff_phone");
+
+let allUsers   = [];
+let editDocId  = null;
+let editData   = null;
+let banPwCache = null;
+let pendingRole = null;       // 'admin' | 'user' | null
+let pendingBanAction = null;  // 'ban' | 'unban' | null
+
+async function loadBanPw(){
+  try{
+    const snap = await getDoc(doc(db,"settings","app"));
+    banPwCache = snap.exists() ? (snap.data().banPassword||null) : null;
+  }catch(e){ banPwCache = null; }
+}
+
+function isEngaged(lastVoteDate){
+  if(!lastVoteDate) return false;
+  return (Date.now() - new Date(lastVoteDate)) / 86400000 <= 10;
+}
+
+async function loadUsers(){
+  const [snap] = await Promise.all([
+    getDocs(collection(db,"users")),
+    (myRole==="superadmin"||myRole==="admin") ? loadBanPw() : Promise.resolve()
+  ]);
+  allUsers = [];
+  snap.forEach(d => allUsers.push({ docId:d.id, ...d.data() }));
+  renderTable();
+}
+loadUsers();
+
+window.renderTable = () => {
+  const search   = document.getElementById("searchInput").value.toLowerCase();
+  const sort     = document.getElementById("sortSelect").value;
+  const roleF    = document.getElementById("filterRole").value;
+  const statusF  = document.getElementById("filterStatus").value;
+  const engageF  = document.getElementById("filterEngagement").value;
+
+  let rows = allUsers.filter(u => {
+    if(search && !(u.name||"").toLowerCase().includes(search) && !(u.phone||"").includes(search)) return false;
+    if(roleF && (u.role||"user") !== roleF) return false;
+    if(statusF==="banned"  && !u.banned)  return false;
+    if(statusF==="active"  &&  u.banned)  return false;
+    if(engageF==="engaged"  && !isEngaged(u.lastVoteDate)) return false;
+    if(engageF==="dormant"  &&  isEngaged(u.lastVoteDate)) return false;
+    return true;
+  });
+
+  rows.sort((a,b)=>{
+    switch(sort){
+      case "points_desc": return (b.totalPoints||0)-(a.totalPoints||0);
+      case "points_asc":  return (a.totalPoints||0)-(b.totalPoints||0);
+      case "streak_desc": return (b.currentStreak||0)-(a.currentStreak||0);
+      case "name_asc":    return (a.name||"").localeCompare(b.name||"");
+      case "join_desc":   return (b.joinDate||"").localeCompare(a.joinDate||"");
+      case "join_asc":    return (a.joinDate||"").localeCompare(b.joinDate||"");
+      default: return 0;
+    }
+  });
+
+  document.getElementById("userCount").textContent =
+    `Showing ${rows.length} of ${allUsers.length} users`;
+
+  const body = document.getElementById("userBody");
+  body.innerHTML = "";
+  rows.forEach((u,i)=>{
+    const role    = u.role||"user";
+    const engaged = isEngaged(u.lastVoteDate);
+
+    const tr = document.createElement("tr");
+    if(u.banned) tr.className="banned-row";
+
+    tr.innerHTML=`
+      <td>${i+1}</td>
+      <td class="name-cell">${escHtml(u.name||"—")}</td>
+      <td>${u.phone||"—"}</td>
+      <td><span class="badge badge-${role==="superadmin"?"super":role}">${
+        role==="superadmin"?"⭐ Super":role==="admin"?"🛡️ Admin":"👤 User"
+      }</span></td>
+      <td><b>${u.totalPoints||0}</b></td>
+      <td>🔥 ${u.currentStreak||0}</td>
+      <td>${u.banned
+        ?'<span class="badge badge-banned">🚫 Banned</span>'
+        :'<span class="badge badge-free">✅ Active</span>'
+      }</td>
+      <td>${engaged
+        ?'<span class="badge badge-engaged">🔥 Engaged</span>'
+        :'<span class="badge badge-dormant">💤 Dormant</span>'
+      }</td>
+      <td>${u.joinDate||"—"}</td>
+      <td><button class="btn-sm btn-edit" onclick='openEdit(${JSON.stringify(u)})'>Edit</button></td>
+    `;
+    body.appendChild(tr);
+  });
+};
+
+window.openEdit = (u) => {
+  editDocId = u.docId;
+  editData  = u;
+  pendingRole = null;
+  pendingBanAction = null;
+
+  const isSelf = u.phone === myPhone;
+  const role   = u.role || "user";
+
+  document.getElementById("editModalTitle").textContent = `Edit: ${u.name||u.phone}`;
+  document.getElementById("em_name").value  = u.name||"";
+  document.getElementById("em_phone").value = u.phone||"";
+  document.getElementById("em_dob").value   = u.dateOfBirth||"";
+  document.getElementById("em_pass").value  = "";
+  document.getElementById("editMsg").textContent = "";
+
+  // ── Role section (toggle buttons — staged, apply on Save) ──
+  const roleInfo   = document.getElementById("roleInfo");
+  const roleBtnRow = document.getElementById("roleBtnRow");
+  roleBtnRow.innerHTML = "";
+
+  function makeToggleRoleBtn(label, type, newRole){
+    const btn = document.createElement("button");
+    btn.className = "role-btn";
+    btn.style.cssText = "background:#94a3b8;color:#fff;transition:background .15s";
+    btn.textContent = label;
+    btn.onclick = () => {
+      if(pendingRole === newRole){
+        pendingRole = null;
+        btn.style.background = "#94a3b8";
+      } else {
+        pendingRole = newRole;
+        btn.style.background = type==="promote" ? "#7c3aed" : "#ea580c";
+        // Deselect sibling buttons
+        roleBtnRow.querySelectorAll("button").forEach(b=>{ if(b!==btn) b.style.background="#94a3b8"; });
+      }
+    };
+    return btn;
+  }
+
+  if(isSelf){
+    roleInfo.textContent = "This is your own account.";
+    if(myRole==="superadmin"){
+      const btn = document.createElement("button");
+      btn.className = "role-btn role-btn-demote";
+      btn.textContent = "Demote myself to Admin";
+      btn.onclick = async()=>{
+        if(!confirm("Demote yourself to admin? You'll lose superadmin access.")) return;
+        await doRoleChange(editDocId,"admin",u.phone,u.name);
+      };
+      roleBtnRow.appendChild(btn);
+    }
+  } else if(myRole==="superadmin"){
+    roleInfo.textContent = `Current role: ${role}`;
+    if(role==="user"){
+      roleBtnRow.appendChild(makeToggleRoleBtn("Promote → Admin","promote","admin"));
+    } else if(role==="admin"){
+      roleBtnRow.appendChild(makeToggleRoleBtn("Demote → User","demote","user"));
+      // Note: "Promote → Superadmin" is only in Admin Settings page
+    } else if(role==="superadmin"){
+      roleInfo.textContent = "This is the Superadmin account. Transfer via Admin Settings.";
+    }
+  } else if(myRole==="admin"){
+    if(role==="user"){
+      roleInfo.textContent = "You can promote this user to Admin.";
+      roleBtnRow.appendChild(makeToggleRoleBtn("Promote → Admin","promote","admin"));
+    } else {
+      roleInfo.textContent = "Only the superadmin can change admin roles.";
+    }
+  }
+
+  // ── Ban section (staged — apply on Save) ──
+  const banSection = document.getElementById("banSection");
+  if((myRole==="superadmin"||myRole==="admin") && !isSelf && role==="user"){
+    banSection.style.display = "block";
+    const banInfo    = document.getElementById("banInfo");
+    const banBtnRow  = document.getElementById("banBtnRow");
+    const banPwWrap  = document.getElementById("banPwWrap");
+    const banPwInput = document.getElementById("banPwInput");
+    banPwInput.value = "";
+    banBtnRow.innerHTML = "";
+    pendingBanAction = null;
+
+    if(u.banned){
+      banInfo.textContent = "This user is currently banned. Toggle Unban then Save.";
+      banPwWrap.style.display = "none";
+      const unbanBtn = document.createElement("button");
+      unbanBtn.className = "role-btn";
+      unbanBtn.style.cssText = "background:#94a3b8;color:#fff;transition:background .15s";
+      unbanBtn.textContent = "✅ Unban User";
+      unbanBtn.onclick = () => {
+        if(pendingBanAction==="unban"){
+          pendingBanAction = null;
+          unbanBtn.style.background = "#94a3b8";
+        } else {
+          pendingBanAction = "unban";
+          unbanBtn.style.background = "#16a34a";
+        }
+      };
+      banBtnRow.appendChild(unbanBtn);
+    } else {
+      banInfo.textContent = banPwCache
+        ? "Enter ban password → click Ban User → then Save Changes."
+        : "⚠️ No ban password set. Set one in Settings first.";
+      banPwWrap.style.display = banPwCache ? "block" : "none";
+      if(banPwCache){
+        const banBtn = document.createElement("button");
+        banBtn.className = "role-btn";
+        banBtn.style.cssText = "background:#94a3b8;color:#fff;opacity:.6;cursor:not-allowed;transition:all .15s";
+        banBtn.textContent = "🚫 Ban User";
+        banBtn.disabled = true;
+        banBtnRow.appendChild(banBtn);
+        banPwInput.oninput = () => {
+          if(banPwInput.value === banPwCache){
+            pendingBanAction = "ban";
+            banBtn.disabled = false;
+            banBtn.style.cssText = "background:#dc2626;color:#fff;cursor:pointer;transition:all .15s";
+            banBtn.style.opacity = "1";
+          } else {
+            pendingBanAction = null;
+            banBtn.disabled = true;
+            banBtn.style.cssText = "background:#94a3b8;color:#fff;opacity:.6;cursor:not-allowed;transition:all .15s";
+          }
+        };
+      }
+    }
+  } else {
+    banSection.style.display = "none";
+  }
+
+  // ── Password field visibility ──
+  const pwRow = document.getElementById("pwFieldRow");
+  const targetRole = u.role || "user";
+  const canResetPw = (myRole==="superadmin" && targetRole!=="superadmin") ||
+                     (myRole==="admin"      && targetRole==="user");
+  if(pwRow) pwRow.style.display = canResetPw ? "" : "none";
+  document.getElementById("em_pass").value = "";
+  document.getElementById("editModal").classList.remove("hidden");
+};
+
+window.closeEdit = () => document.getElementById("editModal").classList.add("hidden");
+
+window.saveEdit = async () => {
+  const newName = document.getElementById("em_name").value.trim();
+  const newDob  = document.getElementById("em_dob").value || null;
+  const newPass = document.getElementById("em_pass").value.trim();
+
+  const updates = { name: newName, dateOfBirth: newDob };
+  const changes = [];
+
+  if(newName !== (editData.name||"")) changes.push(`name → "${newName}"`);
+  if(newDob  !== (editData.dateOfBirth||null)) changes.push("date of birth updated");
+  if(newPass){
+    if(newPass.length < 4){ showMsg("Password must be ≥ 4 characters.",true); return; }
+    updates.password = newPass;
+    changes.push("password reset");
+  }
+
+  // Save info fields
+  await updateDoc(doc(db,"users",editDocId), updates);
+  const idx = allUsers.findIndex(u=>u.docId===editDocId);
+  if(idx!==-1) Object.assign(allUsers[idx], updates);
+
+  // Apply staged role change
+  if(pendingRole){
+    await doRoleChange(editDocId, pendingRole, editData.phone, editData.name);
+    return; // doRoleChange closes modal
+  }
+
+  // Apply staged ban action
+  if(pendingBanAction){
+    if(pendingBanAction==="ban"){
+      const entered = document.getElementById("banPwInput").value;
+      if(entered !== banPwCache){ showMsg("Incorrect ban password.",true); return; }
+    }
+    await doBan(editDocId, pendingBanAction==="ban", editData.phone, editData.name);
+    return; // doBan closes modal
+  }
+
+  const detail = changes.length ? changes.join(", ") : "no field changes";
+  if(window.logAdminAction)
+    logAdminAction("Edited user", `${editData.name||editData.phone}: ${detail}`);
+
+  showMsg("Saved ✅");
+  setTimeout(()=>{ closeEdit(); renderTable(); },1200);
+};
+
+async function doRoleChange(docId,newRole,phone,name){
+  await updateDoc(doc(db,"users",docId),{role:newRole});
+  const idx=allUsers.findIndex(u=>u.docId===docId);
+  if(idx!==-1) allUsers[idx].role=newRole;
+  if(phone===myPhone) localStorage.setItem("ff_role",newRole);
+  if(window.logAdminAction) logAdminAction(`Role changed → ${newRole}`,`${name||phone}`);
+  showMsg(`Role updated to ${newRole} ✅`);
+  setTimeout(()=>{ closeEdit(); renderTable(); },1200);
+}
+
+async function doBan(docId,banned,phone,name){
+  const banUpdate = banned
+    ? {banned:true, bannedAt:new Date().toISOString()}
+    : {banned:false, bannedAt:null};
+  await updateDoc(doc(db,"users",docId),banUpdate);
+  const idx=allUsers.findIndex(u=>u.docId===docId);
+  if(idx!==-1) allUsers[idx].banned=banned;
+  if(window.logAdminAction) logAdminAction(banned?"Banned user":"Unbanned user",`${name||phone}`);
+  showMsg(banned?"User banned 🚫":"User unbanned ✅");
+  setTimeout(()=>{ closeEdit(); renderTable(); },1200);
+}
+
+function mkBtn(label,cls,handler){
+  const b=document.createElement("button");
+  b.className=cls; b.textContent=label;
+  b.addEventListener("click",handler);
+  return b;
+}
+
+function showMsg(txt,isErr=false){
+  const el=document.getElementById("editMsg");
+  el.textContent=txt;
+  el.className=isErr?"save-msg err-msg":"save-msg";
+}
+
+function escHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+</script>
+</body>
+</html>
