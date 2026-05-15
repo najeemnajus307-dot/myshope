@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player Profile | Faith &amp; Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Logo palette — deep forest + bright lime */
+  --ink:#0b1e14;--ink-2:#2a3d30;--ink-3:#556b5c;--ink-4:#92a89a;
+  --line:#d6e5d8;--line-2:#e8f2e6;
+  --paper:#ffffff;--paper-2:#f6faf4;--paper-3:#edf5e8;--paper-mint:#dff0d6;
+  --green-deep:#0d4a28;--green-mid:#1c7a3e;--green-leaf:#72b534;--green-leaf-2:#9ed055;
+  --green-wash:#dff0d0;--green-wash-2:#eaf7de;
+  --gold:#c89228;--gold-soft:#fcefd0;
+  --coral:#d97048;--coral-soft:#fde3d3;
+  --sky:#3682cc;--sky-soft:#d4e8f8;
+  --rose:#cc4a72;--rose-soft:#fcd8e4;
+  --shadow-sm:0 1px 3px rgba(13,74,40,.07),0 1px 2px rgba(13,74,40,.05);
+  --shadow-md:0 4px 16px rgba(13,74,40,.11),0 1px 4px rgba(13,74,40,.07);
+  --shadow-lg:0 8px 32px rgba(13,74,40,.15),0 2px 8px rgba(13,74,40,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f0ebe0;min-height:100vh}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);padding-bottom:78px}
+
+/* ── Nav ── */
+.app-nav{position:fixed;z-index:200;bottom:0;left:0;right:0;background:var(--surface);box-shadow:0 -6px 24px rgba(184,185,200,.55),0 -1px 0 rgba(255,255,255,.9);display:flex;flex-direction:row;padding:6px 4px max(8px,env(safe-area-inset-bottom));gap:4px}
+.nav-logo{display:none}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink-3);font-size:10px;font-weight:500;gap:3px;padding:3px 0}
+.nav-item .ni-icon{font-size:19px;line-height:1.2}
+.nav-item.active{color:var(--green-deep)}
+
+
+/* ── Top bar ── */
+.top-bar{background:var(--paper);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:50;box-shadow:var(--shadow-sm);overflow:hidden}
+.top-bar-inner{flex:1;min-width:0}
+.top-bar-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:2px}
+.top-bar-title{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--green-deep);letter-spacing:-0.01em;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;color:var(--ink-2);font-size:15px;text-decoration:none;transition:all .15s;flex-shrink:0}
+.icon-btn:hover{border-color:var(--green-deep);color:var(--green-deep)}
+.back-icon-btn{gap:0;font-size:20px;font-weight:300}
+
+/* ── Page ── */
+.page{max-width:1100px;margin:0 auto;padding:20px 16px 32px}
+.content-grid{display:flex;flex-direction:column;gap:14px}
+@media(min-width:900px){.content-grid{flex-direction:row;align-items:flex-start}}
+.col-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px}
+.col-aside{display:flex;flex-direction:column;gap:12px}
+@media(min-width:900px){.col-aside{width:320px;flex-shrink:0}}
+
+/* ── Cards ── */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm)}
+
+/* ── Hero card ── */
+.hero-banner{
+  background:linear-gradient(135deg,var(--green-wash-2) 0%,var(--paper-3) 60%,#fff 100%);
+  padding:22px 22px 20px;
+}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:12px}
+.hero-main{display:flex;align-items:flex-start;gap:16px}
+.hero-avatar{
+  width:72px;height:72px;border-radius:50%;
+  font-size:28px;font-weight:700;
+  display:grid;place-items:center;
+  border:3px solid var(--paper);box-shadow:var(--shadow-md);
+  flex-shrink:0;
+}
+.hero-info{flex:1;min-width:0}
+.view-name{font-family:'Fraunces',serif;font-weight:700;font-size:26px;color:var(--green-deep);letter-spacing:-0.02em;line-height:1.1}
+.hero-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:600;line-height:1.3}
+.pill-age{background:var(--paper-2);color:var(--ink-2);border:1px solid var(--line)}
+.pill-streak{background:#fff5eb;color:#c2560a;border:1px solid #fde2c8}
+.pill-you{background:var(--green-wash);color:var(--green-deep);border:1px solid var(--green-leaf)}
+.hero-footer{border-top:1px solid var(--line-2);background:var(--paper-2);padding:10px 22px}
+.hero-footer-txt{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);font-weight:500}
+
+/* ── Stats ── */
+.stats-card{padding:20px 22px}
+.stats-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.stats-title{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--green-deep);letter-spacing:-0.01em}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:400px){.stats-grid{grid-template-columns:1fr 1fr}}
+.stat-tile{border-radius:12px;padding:14px 12px}
+.stat-tile-green{background:#eaf5e2;border:1px solid #c8e6b4}
+.stat-tile-coral{background:#fde8dc;border:1px solid #f5c4a4}
+.stat-tile-sky{background:var(--sky-soft);border:1px solid #b4d4ef}
+.stat-tile-gold{background:var(--gold-soft);border:1px solid #e8cc80}
+.stat-tile-rose{background:var(--rose-soft);border:1px solid #f0a8bc}
+.stat-tile-plum{background:var(--plum-soft);border:1px solid #c8a4e8}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.stat-label-green{color:#2f7a28}.stat-label-coral{color:#b24a18}.stat-label-sky{color:#1d5a8a}
+.stat-label-gold{color:#8a5010}.stat-label-rose{color:#a02848}.stat-label-plum{color:#5a1a8a}
+.stat-num{font-family:'Fraunces',serif;font-weight:700;font-size:28px;color:var(--ink);letter-spacing:-0.03em;line-height:1}
+.stat-sub-txt{font-size:11px;color:var(--ink-3);margin-top:4px}
+.stat-spark{display:block;width:100%;height:22px;margin-top:10px;overflow:visible}
+.stat-tile-green  .stat-spark{color:#2f7a28}
+.stat-tile-coral  .stat-spark{color:#b24a18}
+.stat-tile-sky    .stat-spark{color:#1d5a8a}
+.stat-tile-gold   .stat-spark{color:#8a5010}
+.stat-tile-rose   .stat-spark{color:#a02848}
+.stat-tile-plum   .stat-spark{color:#5a1a8a}
+
+/* ── Achievements aside ── */
+.aside-achv{padding:18px 18px 14px}
+.aside-achv-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.aside-achv-title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--green-deep);letter-spacing:-0.01em}
+.aside-achv-sub{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.achv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.achv-tile{border:1px solid var(--line);border-radius:11px;padding:10px 8px;text-align:center;background:var(--paper);transition:all .15s}
+.achv-tile.earned{border-color:var(--green-leaf);background:var(--green-wash-2)}
+.achv-tile:hover.earned{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.achv-icon{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:18px;background:var(--green-wash);margin:0 auto 6px}
+.achv-tile.earned .achv-icon{background:linear-gradient(135deg,var(--green-leaf-2),var(--green-leaf))}
+.achv-name{font-size:10.5px;font-weight:700;color:var(--ink);line-height:1.2}
+.empty-achv{padding:24px 16px;text-align:center;color:var(--ink-3);font-size:13px}
+
+/* ── Loading ── */
+.loading-state{padding:60px 20px;text-align:center;color:var(--ink-3)}
+.loading-icon{font-size:32px;display:block;margin-bottom:12px;opacity:.5}
+.loading-txt{font-family:'Fraunces',serif;font-size:16px;color:var(--ink-2)}
+</style>
+<!-- OneSignal -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "05d57d24-d6bc-40ab-8549-ea6dcf506070",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: { enable: true },
+    });
+  });
+</script>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <a class="icon-btn back-icon-btn" onclick="history.back()" href="#">‹</a>
+  <div class="top-bar-inner">
+    <div class="top-bar-eyebrow">Community</div>
+    <div class="top-bar-title" id="topBarName">Player Profile</div>
+  </div>
+  <a href="user-settings.html" class="icon-btn">⚙️</a>
+</div>
+
+<div class="page">
+  <!-- Loading state -->
+  <div id="loadingState" class="card">
+    <div class="loading-state">
+      <span class="loading-icon">👤</span>
+      <div class="loading-txt">Loading profile…</div>
+    </div>
+  </div>
+
+  <!-- Content (hidden until loaded) -->
+  <div id="profileContent" style="display:none">
+    <div class="content-grid">
+
+      <!-- LEFT -->
+      <div class="col-main">
+
+        <!-- Hero -->
+        <div class="card">
+          <div class="hero-banner">
+            <div class="hero-eyebrow" id="memberSince">Member</div>
+            <div class="hero-main">
+              <div class="hero-avatar" id="heroAvatar">🧑</div>
+              <div class="hero-info">
+                <div class="view-name" id="heroName">—</div>
+                <div class="hero-pills" id="heroPills">
+                  <!-- filled by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hero-footer">
+            <div class="hero-footer-txt" id="heroFooter">—</div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card">
+          <div class="stats-card">
+            <div class="stats-head">
+              <div class="stats-title">Stats</div>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-tile stat-tile-green">
+                <div class="stat-label stat-label-green">Total Points</div>
+                <div class="stat-num" id="statPoints">—</div>
+                <div class="stat-sub-txt">All time</div>
+                <svg class="stat-spark" viewBox="0 0 80 22" fill="none" preserveAspectRatio="none">
+                  <path d="M0,21 C8,19 16,17 26,13 C36,9 46,7 56,4 C66,1 73,.5 80,0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="stat-tile stat-tile-coral">
+                <div class="stat-label stat-label-coral">Best Streak</div>
+                <div class="stat-num" id="statBestStreak">—</div>
+                <div class="stat-sub-txt">Days in a row</div>
+                <svg class="stat-spark" viewBox="0 0 80 22" fill="none" preserveAspectRatio="none">
+                  <path d="M0,20 C6,18 14,18 22,16 C30,14 36,12 46,8 C56,4 68,2 80,0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="stat-tile stat-tile-sky">
+                <div class="stat-label stat-label-sky">Sessions</div>
+                <div class="stat-num" id="statVotes">—</div>
+                <div class="stat-sub-txt">Submitted</div>
+                <svg class="stat-spark" viewBox="0 0 80 22" fill="none" preserveAspectRatio="none">
+                  <path d="M0,21 C10,20 20,18 30,15 C42,12 52,9 62,5 C70,2 76,1 80,0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="stat-tile stat-tile-gold">
+                <div class="stat-label stat-label-gold">Current Streak</div>
+                <div class="stat-num" id="statStreak">—</div>
+                <div class="stat-sub-txt">Active now</div>
+                <svg class="stat-spark" viewBox="0 0 80 22" fill="none" preserveAspectRatio="none">
+                  <path d="M0,21 C5,19 12,17 20,15 C28,13 38,10 50,6 C60,3 70,1 80,0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="stat-tile stat-tile-rose">
+                <div class="stat-label stat-label-rose">All-Time Rank</div>
+                <div class="stat-num" id="statAllTime">—</div>
+                <div class="stat-sub-txt">Overall</div>
+                <svg class="stat-spark" viewBox="0 0 80 22" fill="none" preserveAspectRatio="none">
+                  <path d="M0,21 C12,20 22,18 34,14 C44,10 54,7 64,4 C72,1.5 76,.8 80,0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="stat-tile stat-tile-plum">
+                <div class="stat-label stat-label-plum">Weekly Rank</div>
+                <div class="stat-num" id="statWeekly">—</div>
+                <div class="stat-sub-txt">This week</div>
+                <svg class="stat-spark" viewBox="0 0 80 22" fill="none" preserveAspectRatio="none">
+                  <path d="M0,21 C8,19 18,17 28,14 C40,10 52,7 62,4 C70,2 75,1 80,0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: achievements -->
+      <div class="col-aside">
+        <div class="card">
+          <div class="aside-achv">
+            <div class="aside-achv-head">
+              <div>
+                <div class="aside-achv-title">Achievements</div>
+                <div class="aside-achv-sub" id="achSubLine">— earned</div>
+              </div>
+            </div>
+            <div class="achv-grid" id="achGrid">
+              <!-- filled by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Bottom nav -->
+<nav class="app-nav">
+  <a href="user-home.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="user-leaderboard.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><rect x="2" y="14" width="4" height="7" rx="1"/><rect x="9" y="9" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg>
+    <span>Leaderboard</span>
+  </a>
+  <a href="user-resources.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <span>Library</span>
+  </a>
+  <a href="user-settings.html" class="nav-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    <span>Settings</span>
+  </a>
+</nav>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { applyLang } from "./lang.js";
+import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const myPhone = localStorage.getItem("ff_phone");
+if(!myPhone) location.replace("login.html");
+applyLang();
+
+const DEFAULT_AV_EMOJIS={
+  "avatar-default":"🧑","avatar-star":"⭐","avatar-fire":"🔥",
+  "avatar-crown":"👑","avatar-gem":"💎","avatar-leaf":"🌿",
+  "avatar-moon":"🌙","avatar-sun":"☀️"
+};
+
+const BUILTIN_ACH=[
+  {id:"pts-100",  icon:"⭐",name:"First 100",      field:"totalPoints",    op:">=",value:100},
+  {id:"pts-500",  icon:"💎",name:"500 Club",        field:"totalPoints",    op:">=",value:500},
+  {id:"pts-1000", icon:"👑",name:"1K Legend",       field:"totalPoints",    op:">=",value:1000},
+  {id:"pts-5000", icon:"🌟",name:"5K Champion",     field:"totalPoints",    op:">=",value:5000},
+  {id:"str-3",    icon:"🔥",name:"3-Day Streak",    field:"currentStreak",  op:">=",value:3},
+  {id:"str-7",    icon:"🔥",name:"Week Warrior",    field:"bestStreak",     op:">=",value:7},
+  {id:"str-14",   icon:"💥",name:"Fortnight Fire",  field:"bestStreak",     op:">=",value:14},
+  {id:"str-30",   icon:"🏅",name:"Monthly Legend",  field:"bestStreak",     op:">=",value:30},
+  {id:"vote-5",   icon:"✅",name:"Getting Started", field:"totalVotesCount",op:">=",value:5},
+  {id:"vote-10",  icon:"🎯",name:"Consistent",      field:"totalVotesCount",op:">=",value:10},
+  {id:"vote-25",  icon:"📅",name:"Regular",         field:"totalVotesCount",op:">=",value:25},
+  {id:"vote-50",  icon:"🗓️",name:"Dedicated",       field:"totalVotesCount",op:">=",value:50},
+  {id:"vote-100", icon:"🏆",name:"Century Voter",   field:"totalVotesCount",op:">=",value:100},
+];
+
+function getAvatarColor(name){
+  const colors=[
+    "background:linear-gradient(135deg,#c9a8e8,#7a4ab9);color:#fff",
+    "background:linear-gradient(135deg,#a8d4f5,#4a9ad9);color:#1d4a7a",
+    "background:linear-gradient(135deg,#f5a4b8,#e85a7a);color:#fff",
+    "background:linear-gradient(135deg,#a8e8c8,#2f8a4a);color:#fff",
+    "background:linear-gradient(135deg,#f5b8a4,#e87a4a);color:#fff",
+    "background:linear-gradient(135deg,#e8c8f5,#b14a8a);color:#fff",
+    "background:linear-gradient(135deg,#f5e4a4,#e8b34a);color:#5a3e10",
+    "background:linear-gradient(135deg,#a4d4f8,#1a6aaa);color:#fff",
+  ];
+  let hash=0;
+  for(let i=0;i<(name||"").length;i++) hash=(hash<<5)-hash+(name||"").charCodeAt(i);
+  return colors[Math.abs(hash)%colors.length];
+}
+
+function escHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+const uid = new URLSearchParams(location.search).get("uid");
+
+async function load(){
+  if(!uid){showError("No profile specified.");return;}
+
+  let ud;
+  try{
+    const snap=await getDoc(doc(db,"users",uid));
+    if(!snap.exists()){showError("Profile not found.");return;}
+    ud=snap.data();
+  }catch(e){showError("Could not load profile.");return;}
+
+  const isMe=ud.phone===myPhone;
+
+  // Resolve avatar emoji
+  let avatarEmoji="🧑";
+  try{
+    const settingsDoc=await getDoc(doc(db,"settings","app"));
+    const avMap={...DEFAULT_AV_EMOJIS};
+    if(settingsDoc.exists()&&Array.isArray(settingsDoc.data().avatars)){
+      settingsDoc.data().avatars.forEach(av=>{if(av.id&&av.emoji)avMap[av.id]=av.emoji;});
+    }
+    avatarEmoji=avMap[ud.avatarId||"avatar-default"]||"🧑";
+  }catch(e){
+    avatarEmoji=DEFAULT_AV_EMOJIS[ud.avatarId||"avatar-default"]||"🧑";
+  }
+
+  // Top bar name
+  document.getElementById("topBarName").textContent=ud.name||"Player Profile";
+
+  // Hero avatar with hash color
+  const avEl=document.getElementById("heroAvatar");
+  avEl.style.cssText=getAvatarColor(ud.name||"");
+  avEl.textContent=avatarEmoji;
+
+  // Member since eyebrow
+  if(ud.joinDate) document.getElementById("memberSince").textContent="Member since "+ud.joinDate;
+
+  // Name
+  document.getElementById("heroName").textContent=ud.name||"—";
+
+  // Pills
+  const pillsEl=document.getElementById("heroPills");
+  let pillsHTML="";
+  if(isMe) pillsHTML+=`<span class="pill pill-you">👤 You</span>`;
+  if(ud.dateOfBirth){
+    const age=Math.floor((Date.now()-new Date(ud.dateOfBirth).getTime())/(365.25*24*3600*1000));
+    if(age>=5&&age<120) pillsHTML+=`<span class="pill pill-age">🎂 ${age} years</span>`;
+  }
+  if(ud.currentStreak>0) pillsHTML+=`<span class="pill pill-streak">🔥 ${ud.currentStreak}-day streak</span>`;
+  pillsEl.innerHTML=pillsHTML;
+
+  // Footer
+  const footerParts=[];
+  if(ud.totalPoints) footerParts.push(ud.totalPoints+" pts all time");
+  if(ud.totalVotesCount) footerParts.push(ud.totalVotesCount+" sessions");
+  document.getElementById("heroFooter").textContent=footerParts.join("  ·  ")||"Faith & Fitness member";
+
+  // Stats tiles
+  document.getElementById("statPoints").textContent=ud.totalPoints||0;
+  document.getElementById("statBestStreak").textContent=ud.bestStreak||0;
+  document.getElementById("statVotes").textContent=ud.totalVotesCount||0;
+  document.getElementById("statStreak").textContent=ud.currentStreak||0;
+
+  // Compute live ranks from cached leaderboard data if available, else from Firestore
+  try{
+    const cachedUsers=JSON.parse(localStorage.getItem("ff_lb_users")||"[]");
+    const cachedVotes=JSON.parse(localStorage.getItem("ff_lb_votes")||"[]");
+    if(cachedUsers.length>0){
+      computeRanks(cachedUsers, cachedVotes, ud.phone);
+    } else {
+      const[usSnap,vsSnap]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"votes"))]);
+      const uArr=[]; vsArr=[];
+      usSnap.forEach(d=>uArr.push({id:d.id,...d.data()}));
+      vsSnap.forEach(d=>vsArr.push({id:d.id,...d.data()}));
+      computeRanks(uArr, vsArr, ud.phone);
+    }
+  }catch(e){
+    document.getElementById("statAllTime").textContent="—";
+    document.getElementById("statWeekly").textContent="—";
+  }
+
+  // Achievements
+  const earned=BUILTIN_ACH.filter(def=>{
+    const val=ud[def.field]||0;
+    return def.op===">="?val>=def.value:val===def.value;
+  });
+  document.getElementById("achSubLine").textContent=earned.length+" of "+BUILTIN_ACH.length+" earned";
+  const grid=document.getElementById("achGrid");
+  if(earned.length===0){
+    grid.innerHTML=`<div class="empty-achv" style="grid-column:1/-1">No badges yet.</div>`;
+  } else {
+    grid.innerHTML=earned.slice(0,9).map(def=>`
+      <div class="achv-tile earned">
+        <div class="achv-icon">${def.icon}</div>
+        <div class="achv-name">${escHtml(def.name)}</div>
+      </div>
+    `).join("");
+  }
+
+  // Show content
+  document.getElementById("loadingState").style.display="none";
+  document.getElementById("profileContent").style.display="";
+}
+
+function computeRanks(users, votes, targetPhone){
+  const now=new Date(), day=now.getDay();
+  const mon=new Date(now); mon.setDate(now.getDate()-(day===0?6:day-1));
+  const weekFrom=mon.toISOString().split("T")[0];
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const weekTo=sun.toISOString().split("T")[0];
+
+  const phoneToMap={};
+  users.forEach(u=>{if(u.role!=="superadmin")phoneToMap[u.phone]={allPts:u.totalPoints||0,weekPts:0};});
+  votes.forEach(v=>{
+    if(!v.date||!phoneToMap[v.phone])return;
+    if(v.date>=weekFrom&&v.date<=weekTo) phoneToMap[v.phone].weekPts+=Number(v.points||0);
+  });
+
+  function denseRank(arr,field){
+    const sorted=[...arr].sort((a,b)=>b[field]-a[field]);
+    let rank=1,prev=null,out={};
+    sorted.forEach((u,i)=>{
+      if(u[field]<=0){out[u.phone]=null;return;}
+      if(u[field]!==prev){rank=i+1;prev=u[field];}
+      out[u.phone]=rank;
+    });
+    return out;
+  }
+  const entries=Object.entries(phoneToMap).map(([phone,d])=>({phone,...d}));
+  const allRanks=denseRank(entries,"allPts");
+  const weekRanks=denseRank(entries,"weekPts");
+
+  const atRank=allRanks[targetPhone];
+  const wkRank=weekRanks[targetPhone];
+  document.getElementById("statAllTime").textContent=atRank!=null?"#"+atRank:"—";
+  document.getElementById("statWeekly").textContent=wkRank!=null?"#"+wkRank:"—";
+}
+
+function showError(msg){
+  document.getElementById("loadingState").innerHTML=`
+    <div class="loading-state">
+      <span class="loading-icon">⚠️</span>
+      <div class="loading-txt">${escHtml(msg)}</div>
+    </div>
+  `;
+}
+
+load();
+</script>
+<script>
+location.href="admin-dashboard.html";};
+</script>
+</body>
+</html>
