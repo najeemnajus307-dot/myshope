@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Settings | Faith &amp; Fitness</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;min-height:100vh}
+.wrap{display:flex;min-height:100vh}
+#adminSidebar{flex-shrink:0}
+.main{flex:1;padding:20px;overflow-x:hidden;max-width:520px}
+
+.page-title{font-size:20px;font-weight:bold;color:#14532d;margin-bottom:6px}
+.card{
+  background:#fff;border-radius:12px;padding:22px;
+  margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.card-title{
+  font-size:12px;font-weight:bold;letter-spacing:.8px;
+  color:#64748b;text-transform:uppercase;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title span{font-size:16px}
+
+.field-row{margin-bottom:12px}
+.field-label{font-size:12px;font-weight:bold;color:#475569;display:block;margin-bottom:5px}
+.field-row input[type=password],
+.field-row input[type=text]{
+  width:100%;padding:10px 13px;
+  border:1.5px solid #e2e8f0;border-radius:8px;
+  font-size:14px;outline:none;
+}
+.field-row input:focus{border-color:#16a34a}
+
+.hint{font-size:12px;color:#94a3b8;margin-top:5px}
+
+.btn{padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+.btn-green{background:#16a34a;color:#fff;width:100%;margin-top:4px}
+.btn-green:hover{opacity:.88}
+.btn-danger{background:#dc2626;color:#fff;width:100%;margin-top:4px;padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+.btn-danger:hover{background:#b91c1c}
+.btn-danger:disabled{background:#94a3b8;cursor:not-allowed}
+
+.save-msg{font-size:13px;margin-top:8px;min-height:18px;text-align:center}
+.save-ok{color:#16a34a}
+.save-err{color:#dc2626}
+
+/* Toggle */
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0}
+.setting-label{font-size:14px;font-weight:bold;color:#1e293b}
+.setting-desc{font-size:12px;color:#64748b;margin-top:2px}
+.toggle{position:relative;width:46px;height:26px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#e2e8f0;border-radius:26px;cursor:pointer;transition:background .2s}
+.slider::before{
+  content:"";position:absolute;width:20px;height:20px;
+  left:3px;bottom:3px;background:#fff;border-radius:50%;
+  transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+input:checked + .slider{background:#16a34a}
+input:checked + .slider::before{transform:translateX(20px)}
+
+.super-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#fde047;color:#713f12;
+  padding:3px 10px;border-radius:20px;font-size:12px;font-weight:bold;
+  margin-bottom:16px;
+}
+
+/* Current pw display */
+.pw-display{
+  background:#f8fafc;border:1.5px dashed #e2e8f0;border-radius:8px;
+  padding:10px 13px;font-size:14px;color:#475569;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.pw-display .mask{letter-spacing:3px;font-size:16px}
+.pw-show-btn{font-size:12px;font-weight:bold;color:#0284c7;background:none;border:none;cursor:pointer}
+
+@media(max-width:700px){.wrap{flex-direction:column}}
+</style>
+<!-- OneSignal Push Notifications -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "05d57d24-d6bc-40ab-8549-ea6dcf506070",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: { enable: true },
+    });
+  });
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div id="adminSidebar"></div>
+
+  <main class="main">
+    <div class="page-title">⚙️ Admin Settings</div>
+    <div class="super-badge">⭐ Superadmin Only</div>
+
+    <!-- ── Dark Mode ── -->
+    <div class="card">
+      <div class="card-title"><span>🌙</span> Admin Appearance</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Dark Mode</div>
+          <div class="setting-desc">Admin panel dark theme (independent of user setting)</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="tog_dark">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <button class="btn btn-green" style="margin-top:14px" onclick="saveDarkMode()">Save</button>
+      <div class="save-msg" id="darkMsg"></div>
+    </div>
+
+    <!-- ── Ban Password ── -->
+    <div class="card">
+      <div class="card-title"><span>🔒</span> Ban Password</div>
+      <p style="font-size:13px;color:#64748b;margin-bottom:14px">
+        Required to ban any user. Only the superadmin can set or change it.
+      </p>
+
+      <div id="currentBanPwDisplay" class="pw-display" style="display:none">
+        <span>Current: <span class="mask" id="banPwMask">••••••</span></span>
+        <button class="pw-show-btn" onclick="toggleShowBanPw()">Show</button>
+      </div>
+      <div id="noBanPwNotice" style="font-size:13px;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;margin-bottom:12px">
+        ⚠️ No ban password set. Admins cannot ban users until you set one.
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">New Ban Password</label>
+        <input type="password" id="banPwNew" placeholder="Set ban password…">
+        <div class="hint">This replaces any existing ban password immediately.</div>
+      </div>
+      <button class="btn btn-green" onclick="saveBanPassword()">Set Ban Password</button>
+      <div class="save-msg" id="banPwMsg"></div>
+    </div>
+
+    <!-- ── OneSignal Push ── -->
+    <div class="card">
+      <div class="card-title"><span>🔔</span> Push Notifications (OneSignal)</div>
+      <p style="font-size:13px;color:#64748b;margin-bottom:14px">
+        Enter your OneSignal REST API Key to enable sending push notifications from the Broadcast page.
+        Find it in <b>OneSignal → Settings → Keys &amp; IDs → Legacy API Key</b>.
+        This key is stored securely in Firestore — never in your code or GitHub.
+      </p>
+
+      <div id="osKeySet" style="display:none;font-size:13px;color:#16a34a;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin-bottom:12px">
+        ✅ REST API Key is set. You can update it below.
+      </div>
+      <div id="osKeyNotSet" style="font-size:13px;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;margin-bottom:12px">
+        ⚠️ No REST API Key set. Push notifications cannot be sent until you add one.
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">REST API Key</label>
+        <input type="password" id="osApiKey" placeholder="Paste your OneSignal REST API key…">
+        <div class="hint">Starts with "os_v2_app_..." or similar.</div>
+      </div>
+      <button class="btn btn-green" onclick="saveOsKey()">Save API Key</button>
+      <div class="save-msg" id="osKeyMsg"></div>
+    </div>
+
+
+    <!-- ── Transfer Superadmin ── -->
+    <div class="card" id="transferCard">
+      <div class="card-title"><span>⭐</span> Transfer Superadmin</div>
+      <p style="font-size:13px;color:#64748b;margin-bottom:14px">
+        Promote another admin or user to Superadmin. <b>You will automatically be demoted to Admin.</b>
+      </p>
+      <div class="field-row">
+        <label class="field-label">Select User to Promote</label>
+        <select id="promoteSel" style="width:100%;padding:10px 13px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;outline:none">
+          <option value="">Loading users…</option>
+        </select>
+      </div>
+      <div id="transferPwField" style="display:none;margin-top:10px">
+        <label class="field-label" style="color:#dc2626">Confirm with Ban Password</label>
+        <input type="password" id="transferPw" placeholder="Enter ban password to confirm…"
+          style="width:100%;padding:10px 13px;border:1.5px solid #dc2626;border-radius:8px;font-size:14px;outline:none">
+        <div class="hint" style="color:#dc2626;margin-top:4px">Required to authorise the transfer.</div>
+      </div>
+      <div id="promoteWarning" style="display:none;font-size:12px;background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:10px;margin-bottom:12px;color:#78350f;margin-top:10px">
+        ⚠️ <b>This action is permanent.</b> You will be demoted to Admin and the selected user will become the new Superadmin.
+      </div>
+      <button class="btn btn-danger" id="promoteBtn" onclick="doTransferSuperadmin()" disabled
+        style="opacity:.45;cursor:not-allowed">⭐ Transfer Superadmin Role</button>
+      <div class="save-msg" id="transferMsg"></div>
+    </div>
+
+  </main>
+</div>
+
+<script type="module">
+import "./admin-nav.js";
+import { db } from "./firebase.js";
+import {
+  doc, getDoc, setDoc, collection, getDocs, query, where, updateDoc
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const myRole = localStorage.getItem("ff_role");
+if(myRole !== "superadmin"){
+  document.querySelector(".main").innerHTML =
+    `<div style="padding:40px;text-align:center;color:#dc2626;font-size:16px">
+       🚫 This page is only accessible to the Superadmin.
+     </div>`;
+}
+
+// Apply current admin dark mode
+document.getElementById("tog_dark").checked =
+  localStorage.getItem("ff_admin_dark") === "true";
+
+let currentBanPw = null;
+
+async function loadSettings(){
+  const snap = await getDoc(doc(db,"settings","app"));
+  if(snap.exists()){
+    currentBanPw = snap.data().banPassword || null;
+    const osKey  = snap.data().oneSignalApiKey || null;
+
+    if(osKey){
+      document.getElementById("osKeySet").style.display    = "block";
+      document.getElementById("osKeyNotSet").style.display = "none";
+    }
+  }
+
+  if(currentBanPw){
+    document.getElementById("currentBanPwDisplay").style.display = "flex";
+    document.getElementById("noBanPwNotice").style.display       = "none";
+    document.getElementById("banPwMask").dataset.actual = currentBanPw;
+  }
+}
+
+window.saveOsKey = async () => {
+  const msg = document.getElementById("osKeyMsg");
+  const key = document.getElementById("osApiKey").value.trim();
+  msg.className = "save-msg save-err";
+  if(!key){ msg.textContent = "Paste your OneSignal REST API key."; return; }
+  if(key.length < 20){ msg.textContent = "That key looks too short — double-check it."; return; }
+  try{
+    await setDoc(doc(db,"settings","app"), { oneSignalApiKey: key }, { merge: true });
+    document.getElementById("osKeySet").style.display    = "block";
+    document.getElementById("osKeyNotSet").style.display = "none";
+    document.getElementById("osApiKey").value = "";
+    msg.className   = "save-msg save-ok";
+    msg.textContent = "OneSignal API key saved ✅";
+    if(window.logAdminAction) logAdminAction("Updated OneSignal API key", "");
+    setTimeout(()=>msg.textContent="", 3000);
+  }catch(e){
+    msg.textContent = "Failed — check Firestore rules.";
+  }
+};
+
+window.toggleShowBanPw = () => {
+  const mask = document.getElementById("banPwMask");
+  const btn  = document.querySelector(".pw-show-btn");
+  if(btn.textContent === "Show"){ mask.textContent = mask.dataset.actual||"—"; btn.textContent="Hide"; }
+  else { mask.textContent = "••••••"; btn.textContent="Show"; }
+};
+
+window.saveDarkMode = () => {
+  const dark = document.getElementById("tog_dark").checked;
+  localStorage.setItem("ff_admin_dark", dark ? "true" : "false");
+  document.documentElement.classList.toggle("admin-dark", dark);
+  const msg = document.getElementById("darkMsg");
+  msg.className = "save-msg save-ok";
+  msg.textContent = "Saved ✅  Reload the page to see the full effect.";
+  setTimeout(()=>msg.textContent="", 3500);
+};
+
+window.saveBanPassword = async () => {
+  const msg  = document.getElementById("banPwMsg");
+  const newPw = document.getElementById("banPwNew").value.trim();
+  msg.className = "save-msg save-err";
+  if(!newPw){ msg.textContent = "Enter a ban password."; return; }
+  if(newPw.length < 4){ msg.textContent = "Must be at least 4 characters."; return; }
+  try{
+    await setDoc(doc(db,"settings","app"), { banPassword: newPw }, { merge: true });
+    currentBanPw = newPw;
+    document.getElementById("banPwMask").dataset.actual = newPw;
+    document.getElementById("banPwMask").textContent    = "••••••";
+    document.getElementById("currentBanPwDisplay").style.display = "flex";
+    document.getElementById("noBanPwNotice").style.display       = "none";
+    document.getElementById("banPwNew").value = "";
+    msg.className   = "save-msg save-ok";
+    msg.textContent = "Ban password saved ✅";
+    if(window.logAdminAction) logAdminAction("Updated ban password", "");
+    setTimeout(()=>msg.textContent="", 3000);
+  }catch(e){
+    msg.textContent = "Failed — check Firestore rules.";
+  }
+};
+
+/* ── Transfer superadmin ── */
+let allUsersCache = [];
+async function loadPromoteDropdown(){
+  try{
+    const snap=await getDocs(collection(db,"users"));
+    allUsersCache=[];
+    snap.forEach(d=>{
+      const u=d.data();
+      if(u.phone!==localStorage.getItem("ff_phone")) allUsersCache.push({docId:d.id,...u});
+    });
+    const sel=document.getElementById("promoteSel");
+    if(!sel)return;
+    // Sort: admins first, then users; exclude superadmins
+    const eligible=allUsersCache.filter(u=>(u.role||"user")!=="superadmin");
+    eligible.sort((a,b)=>{
+      if((a.role||"user")===(b.role||"user")) return (a.name||"").localeCompare(b.name||"");
+      return a.role==="admin"?-1:1;
+    });
+    sel.innerHTML='<option value="">— Select a user —</option>'+
+      eligible.map(u=>`<option value="${u.docId}">${u.name||u.phone} (${u.role||"user"})</option>`).join("");
+    function updateTransferBtn(){
+      const hasSel=sel.value!=="";
+      const pw=document.getElementById("transferPw").value;
+      const pwOk=currentBanPw?pw===currentBanPw:pw.length>=4;
+      const btn=document.getElementById("promoteBtn");
+      const warn=document.getElementById("promoteWarning");
+      const pwField=document.getElementById("transferPwField");
+      pwField.style.display=hasSel?"block":"none";
+      warn.style.display=(hasSel&&pwOk)?"block":"none";
+      const ready=hasSel&&pwOk;
+      btn.disabled=!ready;
+      btn.style.opacity=ready?"1":"0.45";
+      btn.style.cursor=ready?"pointer":"not-allowed";
+    }
+    sel.onchange=updateTransferBtn;
+    document.getElementById("transferPw").addEventListener("input",updateTransferBtn);
+  }catch(e){}
+}
+loadPromoteDropdown();
+
+window.doTransferSuperadmin=async()=>{
+  const msg=document.getElementById("transferMsg");
+  const sel=document.getElementById("promoteSel");
+  const pwInput=document.getElementById("transferPw");
+  msg.className="save-msg"; msg.style.color="#dc2626"; msg.textContent="";
+  const targetDocId=sel.value;
+  if(!targetDocId){msg.textContent="Select a user first.";return;}
+  const target=allUsersCache.find(u=>u.docId===targetDocId);
+  if(!target){msg.textContent="User not found.";return;}
+  const pw=pwInput.value;
+  if(currentBanPw&&pw!==currentBanPw){msg.textContent="Incorrect ban password.";return;}
+  if(!currentBanPw&&pw.length<4){msg.textContent="Enter the ban password to confirm.";return;}
+  try{
+    const myPhone=localStorage.getItem("ff_phone");
+    const mySnap=await getDocs(query(collection(db,"users"),where("phone","==",myPhone)));
+    if(mySnap.empty){msg.textContent="Could not find your account.";return;}
+    const myDocId=mySnap.docs[0].id;
+    // Demote self to admin
+    await updateDoc(doc(db,"users",myDocId),{role:"admin"});
+    // Promote target to superadmin
+    await updateDoc(doc(db,"users",targetDocId),{role:"superadmin"});
+    localStorage.setItem("ff_role","admin");
+    if(window.logAdminAction) logAdminAction("Transferred superadmin role",`to ${target.name||target.phone}`);
+    msg.style.color="#16a34a"; msg.textContent="✅ Done! You are now an Admin. Redirecting…";
+    setTimeout(()=>location.replace("admin-dashboard.html"),2000);
+  }catch(e){msg.textContent="Error: "+e.message;}
+};
+
+loadSettings();
+</script>
+</body>
+</html>
