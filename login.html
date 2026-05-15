@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faith &amp; Fitness – Login</title>
+<style>
+/* ── Reset ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+/* ── Card wrapper ── */
+.card{
+  width:100%;
+  max-width:360px;
+}
+
+/* ── Box ── */
+.box{
+  background:#fff;
+  padding:24px 20px 20px;
+  border-radius:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,.13);
+}
+
+/* ── Logo / heading ── */
+.logo{
+  text-align:center;
+  margin-bottom:18px;
+}
+.logo h2{
+  font-size:18px;
+  color:#14532d;
+  letter-spacing:.5px;
+}
+.logo p{
+  font-size:13px;
+  color:#64748b;
+  margin-top:2px;
+}
+
+/* ── Form elements ── */
+.form-group{margin-bottom:12px}
+label.field-label{
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  color:#475569;
+  margin-bottom:4px;
+}
+input[type=text],
+input[type=password],
+input[type=tel]{
+  width:100%;
+  padding:10px 12px;
+  border:1.5px solid #e2e8f0;
+  border-radius:7px;
+  font-size:14px;
+  outline:none;
+  transition:border-color .2s;
+}
+input:focus{border-color:#16a34a}
+
+/* ── Buttons ── */
+.btn{
+  width:100%;
+  padding:11px;
+  border:none;
+  border-radius:7px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:4px;
+  transition:opacity .2s;
+}
+.btn:hover{opacity:.88}
+.btn-green{background:#16a34a;color:#fff}
+.btn-dark{background:#14532d;color:#fff}
+.btn-outline{
+  background:transparent;
+  border:1.5px solid #16a34a;
+  color:#16a34a;
+  margin-top:8px;
+}
+
+/* ── Link-style text ── */
+.link-row{
+  text-align:center;
+  margin-top:14px;
+  font-size:13px;
+  color:#64748b;
+}
+.link-row span{
+  color:#16a34a;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* ── Forgot / reset ── */
+.forgot{
+  text-align:right;
+  font-size:12px;
+  margin-bottom:8px;
+}
+.forgot span{color:#16a34a;cursor:pointer;font-weight:bold}
+
+/* ── Error/info message ── */
+.msg{
+  font-size:13px;
+  text-align:center;
+  padding:8px 10px;
+  border-radius:6px;
+  margin-bottom:10px;
+  display:none;
+}
+.msg.error{background:#fee2e2;color:#b91c1c;display:block}
+.msg.success{background:#dcfce7;color:#15803d;display:block}
+
+/* ── Section toggle ── */
+.section{display:none}
+.section.active{display:block}
+
+/* ── Test bypass bar ── */
+.bypass{
+  margin-top:14px;
+  background:#fef9c3;
+  border:1px dashed #ca8a04;
+  border-radius:7px;
+  padding:10px;
+  font-size:12px;
+}
+.bypass p{
+  color:#92400e;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+.bypass-btns{display:flex;gap:6px;flex-wrap:wrap}
+.bypass-btns button{
+  flex:1;
+  min-width:80px;
+  padding:6px;
+  border:none;
+  border-radius:5px;
+  font-size:12px;
+  cursor:pointer;
+  background:#fde047;
+  color:#713f12;
+  font-weight:bold;
+}
+
+/* ── Divider ── */
+.divider{
+  border:none;
+  border-top:1px solid #e2e8f0;
+  margin:14px 0;
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/*  ONBOARDING OVERLAY                                     */
+/* ═══════════════════════════════════════════════════════ */
+.ob-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:20px;
+}
+.ob-overlay.hidden{display:none}
+.ob-card{
+  background:#fff;
+  border-radius:14px;
+  width:100%;
+  max-width:340px;
+  overflow:hidden;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+.ob-header{
+  background:linear-gradient(135deg,#16a34a,#14532d);
+  padding:24px 20px 16px;
+  text-align:center;
+  color:#fff;
+}
+.ob-header .ob-icon{font-size:46px;display:block;margin-bottom:8px}
+.ob-header h2{font-size:19px;margin-bottom:4px}
+.ob-header p{font-size:13px;opacity:.85}
+.ob-body{padding:20px}
+.ob-slide{display:none}
+.ob-slide.active{display:block}
+.ob-feature{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:13px;
+}
+.ob-feature .icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.ob-feature .text h4{font-size:14px;color:#14532d;margin-bottom:2px}
+.ob-feature .text p{font-size:12px;color:#64748b;line-height:1.4}
+.ob-dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:14px 0 16px;
+}
+.ob-dots span{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#e2e8f0;
+  display:inline-block;
+  transition:background .2s;
+}
+.ob-dots span.active{background:#16a34a}
+.ob-actions{
+  display:flex;
+  gap:8px;
+  padding:0 20px 20px;
+}
+.ob-actions button{
+  flex:1;padding:11px;
+  border:none;border-radius:7px;
+  font-size:14px;font-weight:bold;
+  cursor:pointer;
+}
+.ob-btn-skip{background:#f1f5f9;color:#475569}
+.ob-btn-next{background:#16a34a;color:#fff}
+</style>
+<!-- OneSignal Push Notifications -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "05d57d24-d6bc-40ab-8549-ea6dcf506070",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: { enable: true },
+    });
+  });
+</script>
+</head>
+<body>
+
+<!-- ═══ ONBOARDING OVERLAY ═══ -->
+<div class="ob-overlay hidden" id="obOverlay">
+  <div class="ob-card">
+
+    <div class="ob-header">
+      <span class="ob-icon">🕌</span>
+      <h2>Faith &amp; Fitness</h2>
+      <p id="obSubtitle">Welcome to the community!</p>
+    </div>
+
+    <!-- Slide 1 – Welcome -->
+    <div class="ob-body">
+      <div class="ob-slide active" id="ob-slide-1">
+        <div class="ob-feature">
+          <span class="icon">🏆</span>
+          <div class="text">
+            <h4>Track Your Progress</h4>
+            <p>Earn points each day, build streaks, and climb the leaderboard with your community.</p>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <span class="icon">🎖️</span>
+          <div class="text">
+            <h4>Unlock Achievements</h4>
+            <p>Hit milestones to unlock badges and exclusive profile avatars.</p>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <span class="icon">🤝</span>
+          <div class="text">
+            <h4>Community Accountability</h4>
+            <p>Stay consistent alongside 100+ members working toward their Faith &amp; Fitness goals.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 – How Voting Works -->
+      <div class="ob-slide" id="ob-slide-2">
+        <div class="ob-feature">
+          <span class="icon">🕗</span>
+          <div class="text">
+            <h4>Voting Window</h4>
+            <p>Each day's voting opens at <b>8:00 PM</b> and closes at <b>12:00 PM</b> the next day — a 16-hour window.</p>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <span class="icon">✅</span>
+          <div class="text">
+            <h4>Submit Once Per Day</h4>
+            <p>Choose your tasks, earn your points, and submit. You can only vote once per voting session.</p>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <span class="icon">🔥</span>
+          <div class="text">
+            <h4>Keep Your Streak</h4>
+            <p>Vote every session to build your streak. Missing a session resets it — stay consistent!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-dots">
+        <span class="active" id="ob-dot-1"></span>
+        <span id="ob-dot-2"></span>
+      </div>
+    </div>
+
+    <div class="ob-actions">
+      <button class="ob-btn-skip" onclick="skipOnboarding()">Skip</button>
+      <button class="ob-btn-next" id="obNextBtn" onclick="obNext()">Next →</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══ LOGIN CARD ═══ -->
+<div class="card">
+  <div class="box">
+
+    <div class="logo">
+      <h2>🕌 FAITH &amp; FITNESS</h2>
+      <p id="tabDesc">Member Login</p>
+    </div>
+
+    <!-- ── Message bar ── -->
+    <div class="msg" id="msgBar"></div>
+
+    <!-- ─────────────── USER – LOGIN ─────────────── -->
+    <div class="section active" id="sec-user-login">
+      <div class="form-group">
+        <label class="field-label">Phone Number</label>
+        <input type="tel" id="ul_phone" placeholder="e.g. 0501234567" maxlength="15">
+      </div>
+      <div class="form-group">
+        <label class="field-label">Password</label>
+        <input type="password" id="ul_pass" placeholder="Your password">
+      </div>
+      <div class="forgot">
+        <span onclick="showSection('sec-user-reset')">Forgot Password?</span>
+      </div>
+      <button class="btn btn-green" onclick="userLogin()">Login</button>
+      <div class="link-row">
+        New member? <span onclick="showSection('sec-user-signup')">Sign up</span>
+      </div>
+    </div>
+
+    <!-- ─────────────── USER – SIGNUP ─────────────── -->
+    <div class="section" id="sec-user-signup">
+      <div class="form-group">
+        <label class="field-label">Full Name</label>
+        <input type="text" id="us_name" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label class="field-label">Phone Number</label>
+        <input type="tel" id="us_phone" placeholder="e.g. 0501234567" maxlength="15">
+      </div>
+      <div class="form-group">
+        <label class="field-label">Password</label>
+        <input type="password" id="us_pass" placeholder="Choose a password">
+      </div>
+      <button class="btn btn-green" onclick="userSignup()">Create Account</button>
+      <div class="link-row">
+        Already a member? <span onclick="showSection('sec-user-login')">Login</span>
+      </div>
+    </div>
+
+    <!-- ─────────────── USER – RESET PASSWORD ─────────────── -->
+    <div class="section" id="sec-user-reset">
+      <p style="font-size:13px;color:#64748b;margin-bottom:12px">
+        Enter your phone number and choose a new password.
+      </p>
+      <div class="form-group">
+        <label class="field-label">Phone Number</label>
+        <input type="tel" id="ur_phone" placeholder="Your registered phone">
+      </div>
+      <div class="form-group">
+        <label class="field-label">New Password</label>
+        <input type="password" id="ur_pass" placeholder="New password">
+      </div>
+      <button class="btn btn-green" onclick="userReset()">Reset Password</button>
+      <div class="link-row">
+        <span onclick="showSection('sec-user-login')">← Back to Login</span>
+      </div>
+    </div>
+
+    <!-- ─────────────── TEST BYPASS (hide in production) ─────────────── -->
+    <hr class="divider">
+    <div class="bypass">
+      <p>⚠️ Test Bypass (remove before launch)</p>
+      <div class="bypass-btns">
+        <button onclick="bypass('user')">→ User Home</button>
+        <button onclick="bypass('admin')">→ Admin Panel</button>
+        <button onclick="bypass('superadmin')">→ Superadmin</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script type="module">
+/* ─── Firebase imports ─── */
+import { db } from "./firebase.js";
+import {
+  collection, query, where, getDocs,
+  addDoc, updateDoc, doc
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+/* ─────────────── AUTO LOGIN CHECK ─────────────── */
+const savedPhone = localStorage.getItem("ff_phone");
+const savedRole  = localStorage.getItem("ff_role");
+
+if(savedPhone && savedRole){
+  // If they were actively using admin panel, send them back there
+  const inAdmin = localStorage.getItem("ff_in_admin") === "true";
+  if(inAdmin && (savedRole === "admin" || savedRole === "superadmin")){
+    location.replace("admin-dashboard.html");
+  } else {
+    location.replace("user-home.html");
+  }
+}
+
+/* ─────────────── HELPERS ─────────────── */
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function showMsg(text, type = "error"){
+  const bar = document.getElementById("msgBar");
+  bar.textContent = text;
+  bar.className   = "msg " + type;
+}
+
+function clearMsg(){
+  const bar = document.getElementById("msgBar");
+  bar.textContent = "";
+  bar.className   = "msg";
+}
+
+function setLoading(btnEl, isLoading){
+  btnEl.disabled = isLoading;
+  btnEl.textContent = isLoading ? "Please wait…" : btnEl.dataset.label || btnEl.textContent;
+}
+
+window.showSection = (id) => {
+  clearMsg();
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+};
+
+/* ─────────────── USER LOGIN ─────────────── */
+window.userLogin = async () => {
+  clearMsg();
+  const phone = val("ul_phone");
+  const pass  = val("ul_pass");
+
+  if(!phone || !pass){ showMsg("Enter phone and password."); return; }
+
+  const q    = query(collection(db,"users"),
+                 where("phone","==",phone),
+                 where("password","==",pass));
+  const snap = await getDocs(q);
+
+  if(snap.empty){ showMsg("Wrong phone or password. ❌"); return; }
+
+  const user = snap.docs[0].data();
+
+  if(user.banned){ showMsg("Your account has been suspended. Contact admin."); return; }
+
+  // Save session
+  localStorage.setItem("ff_phone", phone);
+  localStorage.setItem("ff_role",  user.role || "user");
+  localStorage.setItem("ff_name",  user.name || "");
+
+  // Always land on user view — admins can switch to admin panel from there
+  // First-time onboarding
+  if(!localStorage.getItem("ff_onboarding_done")){
+    showOnboarding();
+  } else {
+    location.replace("user-home.html");
+  }
+};
+
+/* ─────────────── USER SIGNUP ─────────────── */
+window.userSignup = async () => {
+  clearMsg();
+  const name  = val("us_name");
+  const phone = val("us_phone");
+  const pass  = val("us_pass");
+
+  if(!name || !phone || !pass){ showMsg("All fields are required."); return; }
+  if(phone.length < 7){ showMsg("Enter a valid phone number."); return; }
+  if(pass.length < 4){ showMsg("Password must be at least 4 characters."); return; }
+
+  // Check uniqueness
+  const snap = await getDocs(
+    query(collection(db,"users"), where("phone","==",phone))
+  );
+  if(!snap.empty){ showMsg("This phone number is already registered."); return; }
+
+  // Create user document
+  const today = new Date().toISOString().split("T")[0];
+  await addDoc(collection(db,"users"), {
+    name,
+    phone,
+    password:        pass,
+    role:            "user",
+    dateOfBirth:     null,
+    avatarId:        "avatar-default",
+    currentStreak:   0,
+    bestStreak:      0,
+    totalPoints:     0,
+    totalVotesCount: 0,
+    achievements:    [],
+    weeklyRank:      null,
+    monthlyRank:     null,
+    allTimeRank:     null,
+    lastVoteDate:    null,
+    joinDate:        today,
+    banned:          false,
+    darkMode:        false,
+    language:        "en",
+    reminder:        true,
+    reminderType:    { notify: true, sound: true, vibrate: false }
+  });
+
+  // Save session
+  localStorage.setItem("ff_phone", phone);
+  localStorage.setItem("ff_role",  "user");
+  localStorage.setItem("ff_name",  name);
+
+  // Show onboarding on first signup
+  showOnboarding();
+};
+
+/* ─────────────── USER RESET PASSWORD ─────────────── */
+window.userReset = async () => {
+  clearMsg();
+  const phone   = val("ur_phone");
+  const newPass = val("ur_pass");
+
+  if(!phone || !newPass){ showMsg("Enter phone and new password."); return; }
+  if(newPass.length < 4){ showMsg("Password must be at least 4 characters."); return; }
+
+  const snap = await getDocs(
+    query(collection(db,"users"), where("phone","==",phone))
+  );
+  if(snap.empty){ showMsg("Phone number not found."); return; }
+
+  await updateDoc(doc(db,"users", snap.docs[0].id), { password: newPass });
+  showMsg("Password reset! You can now login. ✅", "success");
+  setTimeout(() => showSection("sec-user-login"), 1800);
+};
+
+/* ─────────────── TEST BYPASS ─────────────── */
+window.bypass = (role) => {
+  localStorage.setItem("ff_phone", "test-bypass");
+  localStorage.setItem("ff_role",  role);
+  localStorage.setItem("ff_name",  "Test User");
+  localStorage.setItem("ff_onboarding_done", "true"); // skip onboarding on bypass
+  if(role === "user"){
+    location.replace("user-home.html");
+  } else {
+    location.replace("admin-dashboard.html");
+  }
+};
+
+/* ═══════════════════════════════════════════════════════ */
+/*  ONBOARDING                                             */
+/* ═══════════════════════════════════════════════════════ */
+let obSlide = 1;
+
+function showOnboarding(){
+  document.getElementById("obOverlay").classList.remove("hidden");
+  goToSlide(1);
+}
+
+function goToSlide(n){
+  obSlide = n;
+  document.querySelectorAll(".ob-slide").forEach(s => s.classList.remove("active"));
+  document.getElementById("ob-slide-"+n).classList.add("active");
+
+  document.querySelectorAll(".ob-dots span").forEach(d => d.classList.remove("active"));
+  document.getElementById("ob-dot-"+n).classList.add("active");
+
+  const btn = document.getElementById("obNextBtn");
+  if(n === 2){
+    btn.textContent = "Get Started 🚀";
+  } else {
+    btn.textContent = "Next →";
+  }
+
+  // subtitle
+  const subtitles = { 1: "Welcome to the community!", 2: "Here's how it works" };
+  document.getElementById("obSubtitle").textContent = subtitles[n] || "";
+}
+
+window.obNext = () => {
+  if(obSlide === 1){
+    goToSlide(2);
+  } else {
+    finishOnboarding();
+  }
+};
+
+window.skipOnboarding = () => finishOnboarding();
+
+function finishOnboarding(){
+  localStorage.setItem("ff_onboarding_done","true");
+  document.getElementById("obOverlay").classList.add("hidden");
+  location.replace("user-home.html");
+}
+
+</script>
+</body>
+</html>
