@@ -7,6 +7,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500..800&display=swap" rel="stylesheet">
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "05d57d24-d6bc-40ab-8549-ea6dcf506070",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: { enable: true },
+    });
+  });
+</script>
 <style>
 :root{
   --bg:#ecebf4;--surface:#ecebf4;--lit:#ffffff;--shade:#b8b9c8;
@@ -21,9 +32,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);min-height:100vh}
-body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82px;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:90px;-webkit-font-smoothing:antialiased}
 
-/* top navbar */
 .top-nav{background:var(--surface);box-shadow:0 4px 16px rgba(184,185,200,.4),0 1px 0 rgba(255,255,255,.8);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .top-nav-brand{display:flex;align-items:center;gap:10px}
 .top-nav-ico{width:36px;height:36px;border-radius:12px;background:linear-gradient(160deg,var(--clay-mint),#4cbf94);box-shadow:var(--clay-shadow),3px 4px 8px rgba(76,191,148,.3);display:grid;place-items:center;font-size:17px}
@@ -31,7 +41,6 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82
 .top-nav-sub{font-size:10px;color:var(--ink-mute);font-weight:600;letter-spacing:.5px}
 .top-nav-greeting{font-size:13px;color:var(--ink-soft);font-weight:600}
 
-/* bottom nav */
 .app-nav{position:fixed;z-index:200;bottom:0;left:0;right:0;background:var(--surface);box-shadow:0 -6px 24px rgba(184,185,200,.55),0 -1px 0 rgba(255,255,255,.9);display:flex;padding:6px 8px max(8px,env(safe-area-inset-bottom))}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--ink-mute);gap:3px;padding:6px 4px 4px;border-radius:14px;transition:all .2s}
 .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
@@ -39,7 +48,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82
 .nav-item.active{color:var(--green-mid);background:linear-gradient(160deg,rgba(114,181,52,.12),rgba(28,122,62,.08));box-shadow:var(--neu-in-sm)}
 .nav-item.active svg{transform:scale(1.15);stroke:var(--green-mid)}
 
-.page{max-width:560px;margin:0 auto;padding:20px 18px 20px}
+.page{max-width:560px;margin:0 auto;padding:20px 18px}
 
 /* streak card */
 .streak-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
@@ -57,17 +66,47 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82
 .pts-num{font-family:'Fraunces',serif;font-weight:700;font-size:24px;letter-spacing:-.4px}
 .tier-pill{background:var(--surface);box-shadow:var(--neu-in-sm);border-radius:999px;padding:7px 15px;font-size:12px;font-weight:700;color:var(--green-mid);white-space:nowrap}
 
-/* voting */
-.vote-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px}
+/* vote status */
+.vote-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px;margin-bottom:18px}
 .vote-eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--ink-mute);margin-bottom:16px}
 .vote-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
-.vote-ico{width:56px;height:56px;border-radius:20px;display:grid;place-items:center;font-size:26px;box-shadow:var(--clay-shadow),6px 8px 16px rgba(0,0,0,.12);flex-shrink:0;transition:background .5s}
+.vote-ico{width:56px;height:56px;border-radius:20px;display:grid;place-items:center;font-size:26px;box-shadow:var(--clay-shadow),6px 8px 16px rgba(0,0,0,.12);flex-shrink:0;transition:all .4s}
 .vote-ico.open{background:linear-gradient(160deg,var(--clay-mint),#4cbf94)}
 .vote-ico.closed{background:linear-gradient(160deg,var(--clay-rose),#ff5a7a)}
+.vote-ico.voted{background:linear-gradient(160deg,var(--clay-lilac),#8a7aff)}
 .vote-title{font-family:'Fraunces',serif;font-weight:700;font-size:21px;letter-spacing:-.3px}
 .vote-desc{font-size:13px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
 .vote-countdown{font-family:'Fraunces',serif;font-size:34px;font-weight:800;letter-spacing:-1.5px;color:var(--ink);background:var(--surface);box-shadow:var(--neu-in-sm);border-radius:var(--r-md);padding:16px;text-align:center}
 .vote-cd-label{font-size:11px;color:var(--ink-mute);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-top:10px}
+
+/* tasks */
+.tasks-card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--neu-out);padding:24px;margin-bottom:18px}
+.tasks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.tasks-title{font-family:'Fraunces',serif;font-weight:700;font-size:18px}
+.pts-preview{background:var(--surface);box-shadow:var(--neu-in-sm);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--green-mid)}
+.task-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r-sm);margin-bottom:10px;background:var(--surface);box-shadow:var(--neu-out-sm);cursor:pointer;transition:all .2s;user-select:none}
+.task-item:last-of-type{margin-bottom:16px}
+.task-item.checked{box-shadow:var(--neu-in-sm)}
+.task-check{width:26px;height:26px;border-radius:8px;background:var(--surface);box-shadow:var(--neu-in-sm);display:grid;place-items:center;font-size:14px;flex-shrink:0;color:transparent;transition:all .2s}
+.task-item.checked .task-check{background:linear-gradient(160deg,#4cbf94,#1c7a3e);color:#fff;box-shadow:none}
+.task-text{flex:1;font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+.task-item.checked .task-text{color:var(--green-mid)}
+.task-pts-badge{font-size:12px;font-weight:700;color:var(--green-mid);white-space:nowrap;background:rgba(28,122,62,.1);padding:3px 9px;border-radius:999px}
+.no-tasks{text-align:center;padding:32px 20px;color:var(--ink-mute);font-size:14px}
+.no-tasks span{font-size:38px;display:block;margin-bottom:10px}
+.submit-btn{width:100%;padding:18px;border:none;border-radius:var(--r-md);font-family:'Fraunces',serif;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s}
+.submit-btn.ready{background:linear-gradient(160deg,#4cbf94,#0d4a28);color:#fff;box-shadow:0 8px 24px rgba(22,163,74,.35)}
+.submit-btn.ready:active{transform:scale(.97)}
+.submit-btn.disabled{background:var(--surface);color:var(--ink-mute);box-shadow:var(--neu-in-sm);cursor:not-allowed}
+
+/* already voted */
+.voted-banner{background:linear-gradient(135deg,rgba(114,181,52,.15),rgba(28,122,62,.08));border:1.5px solid rgba(22,163,74,.3);border-radius:var(--r-md);padding:20px;display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.voted-banner-ico{font-size:36px;flex-shrink:0}
+.voted-banner-title{font-size:15px;font-weight:700;color:var(--green-mid)}
+.voted-banner-sub{font-size:12px;color:var(--ink-soft);margin-top:3px}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:#0d4a28;color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:all .35s;z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -120,7 +159,28 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82
     <div class="vote-cd-label" id="voteLbl"></div>
   </div>
 
+  <!-- already voted banner -->
+  <div class="voted-banner" id="votedBanner" style="display:none">
+    <div class="voted-banner-ico">🎉</div>
+    <div>
+      <div class="voted-banner-title">Already voted today!</div>
+      <div class="voted-banner-sub">Come back tomorrow. Keep the streak alive! 🔥</div>
+    </div>
+  </div>
+
+  <!-- tasks card -->
+  <div class="tasks-card" id="tasksCard" style="display:none">
+    <div class="tasks-header">
+      <div class="tasks-title">Today's Tasks</div>
+      <div class="pts-preview" id="ptsPreview">+0 pts</div>
+    </div>
+    <div id="taskList"><div class="no-tasks"><span>⏳</span>Loading…</div></div>
+    <button class="submit-btn disabled" id="submitBtn" onclick="submitVote()" disabled>Submit Vote</button>
+  </div>
+
 </div>
+
+<div class="toast" id="toast"></div>
 
 <nav class="app-nav">
   <a href="user-home.html" class="nav-item active">
@@ -143,49 +203,240 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);padding-bottom:82
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, query, where, getDocs }
-  from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { t, applyLang } from "./lang.js";
+import {
+  collection, query, where, getDocs,
+  addDoc, updateDoc, doc
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const phone = localStorage.getItem("ff_phone");
 if(!phone) location.replace("login.html");
 
-const hr=new Date().getHours();
-document.getElementById("greeting").textContent=hr<12?"Morning ☀️":hr<17?"Afternoon 🌤️":"Evening 🌙";
+/* greeting */
+const hr = new Date().getHours();
+document.getElementById("greeting").textContent =
+  hr < 12 ? "Morning ☀️" : hr < 17 ? "Afternoon 🌤️" : "Evening 🌙";
 
-const TIERS=[
+/* tiers */
+const TIERS = [
   {n:"Seedling",e:"🌱",m:0},{n:"Sprout",e:"🌿",m:50},{n:"Grower",e:"🍃",m:100},
   {n:"Seeker",e:"🌸",m:250},{n:"Devotee",e:"⭐",m:500},{n:"Guardian",e:"⚡",m:1000},
   {n:"Champion",e:"🏆",m:2000},{n:"Legend",e:"💎",m:3000},{n:"Ascendant",e:"👑",m:5000},
 ];
-function getTier(p){return[...TIERS].reverse().find(t=>p>=t.m)||TIERS[0];}
+function getTier(p){ return [...TIERS].reverse().find(x => p >= x.m) || TIERS[0]; }
 
-getDocs(query(collection(db,"users"),where("phone","==",phone))).then(snap=>{
-  if(snap.empty)return;
-  const u=snap.docs[0].data();
-  const pts=u.totalPoints||0,streak=u.currentStreak||0;
-  document.getElementById("streakNum").textContent=streak;
-  document.getElementById("ptsNum").textContent=pts.toLocaleString();
-  const t=getTier(pts);
-  document.getElementById("tierPill").textContent=t.e+" "+t.n;
+/* user data */
+let userDocId = null, userData = {};
+getDocs(query(collection(db,"users"), where("phone","==",phone))).then(snap => {
+  if(snap.empty) return;
+  userDocId = snap.docs[0].id;
+  userData  = snap.docs[0].data();
+  const pts = userData.totalPoints || 0;
+  document.getElementById("streakNum").textContent = userData.currentStreak || 0;
+  document.getElementById("ptsNum").textContent    = pts.toLocaleString();
+  const tier = getTier(pts);
+  document.getElementById("tierPill").textContent  = tier.e + " " + tier.n;
 }).catch(()=>{});
 
+/* voting window */
 function getWin(){
-  const h=new Date().getHours();
-  if(h>=20||h<12){const c=new Date();if(h>=20){c.setDate(c.getDate()+1);c.setHours(12,0,0,0);}else c.setHours(12,0,0,0);return{open:true,end:c};}
-  const o=new Date();o.setHours(20,0,0,0);return{open:false,end:o};
+  const h = new Date().getHours();
+  if(h >= 20 || h < 12){
+    const c = new Date();
+    if(h >= 20) c.setDate(c.getDate()+1);
+    c.setHours(12,0,0,0);
+    return { open:true, end:c };
+  }
+  const o = new Date(); o.setHours(20,0,0,0);
+  return { open:false, end:o };
 }
-function fmt(ms){const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000),s=Math.floor((ms%60000)/1000);return`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;}
+function fmt(ms){
+  const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000),s=Math.floor((ms%60000)/1000);
+  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+let prevOpen = null;
+let voteInitDone = false;
+
 function tick(){
-  const w=getWin(),diff=Math.max(0,w.end-Date.now());
-  const ico=document.getElementById("voteIco");
-  ico.className="vote-ico "+(w.open?"open":"closed");
-  ico.textContent=w.open?"✅":"🔒";
-  document.getElementById("voteTitle").textContent=w.open?"Voting is Open":"Voting Closed";
-  document.getElementById("voteDesc").textContent=w.open?"Submit your daily session before the window closes.":"Next window opens at 8:00 PM.";
-  document.getElementById("voteCd").textContent=fmt(diff);
-  document.getElementById("voteLbl").textContent=w.open?"Closes in":"Opens in";
+  const w = getWin();
+  const diff = Math.max(0, w.end - Date.now());
+  const ico = document.getElementById("voteIco");
+
+  ico.className   = "vote-ico " + (w.open ? "open" : "closed");
+  ico.textContent = w.open ? "✅" : "🔒";
+  document.getElementById("voteTitle").textContent = w.open ? "Voting is Open" : "Voting Closed";
+  document.getElementById("voteDesc").textContent  = w.open
+    ? "Select completed tasks and submit." : "Next window opens at 8:00 PM.";
+  document.getElementById("voteCd").textContent  = fmt(diff);
+  document.getElementById("voteLbl").textContent = w.open ? "Closes in" : "Opens in";
+
+  if(w.open && !voteInitDone){
+    voteInitDone = true;
+    initVoteSection();
+  }
+  if(!w.open){
+    document.getElementById("tasksCard").style.display   = "none";
+    document.getElementById("votedBanner").style.display = "none";
+  }
 }
-tick();setInterval(tick,1000);
+tick(); setInterval(tick, 1000);
+
+/* init vote section */
+let todayVoted = false;
+let selectedTasks = {};
+
+async function initVoteSection(){
+  const today = new Date().toISOString().split("T")[0];
+
+  // check already voted
+  const vSnap = await getDocs(
+    query(collection(db,"votes"), where("phone","==",phone), where("date","==",today))
+  );
+  todayVoted = !vSnap.empty;
+
+  if(todayVoted){
+    document.getElementById("votedBanner").style.display = "flex";
+    document.getElementById("tasksCard").style.display   = "none";
+    const ico = document.getElementById("voteIco");
+    ico.className = "vote-ico voted"; ico.textContent = "🎉";
+    document.getElementById("voteTitle").textContent = "Already Voted Today!";
+    document.getElementById("voteDesc").textContent  = "Great job! See you tomorrow.";
+    return;
+  }
+
+  document.getElementById("tasksCard").style.display = "block";
+  loadTasks(today);
+}
+
+/* load tasks */
+async function loadTasks(today){
+  const dayOfWeek = new Date().getDay();
+  const snap = await getDocs(collection(db,"tasks"));
+  const list = document.getElementById("taskList");
+  const tasks = [];
+
+  snap.forEach(d => {
+    const tk = { id:d.id, ...d.data() };
+    if(tk.startDate && today < tk.startDate) return;
+    if(tk.endDate   && today > tk.endDate)   return;
+    if(tk.days && tk.days.length > 0 && !tk.days.includes(dayOfWeek)) return;
+    tasks.push(tk);
+  });
+
+  if(tasks.length === 0){
+    list.innerHTML = `<div class="no-tasks"><span>📋</span>No tasks available today.</div>`;
+    return;
+  }
+
+  tasks.sort((a,b) => (b.points||0)-(a.points||0));
+  list.innerHTML = "";
+
+  tasks.forEach(tk => {
+    const div = document.createElement("div");
+    div.className   = "task-item";
+    div.dataset.id  = tk.id;
+    div.dataset.pts = tk.points || 0;
+    div.innerHTML   = `
+      <div class="task-check" id="chk_${tk.id}">✓</div>
+      <div class="task-text">${escHtml(tk.text)}</div>
+      <div class="task-pts-badge">+${tk.points||0} pts</div>
+    `;
+    div.addEventListener("click", () => toggleTask(tk.id, tk.points||0, div));
+    list.appendChild(div);
+  });
+
+  updateBtn();
+}
+
+function toggleTask(id, pts, div){
+  if(selectedTasks[id]){ delete selectedTasks[id]; div.classList.remove("checked"); }
+  else { selectedTasks[id] = pts; div.classList.add("checked"); }
+  updateBtn();
+}
+
+function updateBtn(){
+  const total = Object.values(selectedTasks).reduce((s,v)=>s+v,0);
+  const count = Object.keys(selectedTasks).length;
+  document.getElementById("ptsPreview").textContent = `+${total} pts`;
+  const btn = document.getElementById("submitBtn");
+  if(count > 0){
+    btn.className   = "submit-btn ready";
+    btn.disabled    = false;
+    btn.textContent = `Submit Vote · +${total} pts`;
+  } else {
+    btn.className   = "submit-btn disabled";
+    btn.disabled    = true;
+    btn.textContent = "Submit Vote";
+  }
+}
+
+/* submit */
+window.submitVote = async () => {
+  const btn   = document.getElementById("submitBtn");
+  const today = new Date().toISOString().split("T")[0];
+  const total = Object.values(selectedTasks).reduce((s,v)=>s+v,0);
+  const taskIds = Object.keys(selectedTasks);
+
+  if(!taskIds.length){ showToast("ഒരു task എങ്കിലും select ചെയ്യൂ!"); return; }
+  if(todayVoted){ showToast("ഇന്ന് ഇതിനകം vote ചെയ്തു!"); return; }
+
+  btn.disabled = true; btn.textContent = "Submitting…";
+
+  try {
+    await addDoc(collection(db,"votes"),{
+      phone, date:today, points:total, tasks:taskIds,
+      source:"user", votedAt: new Date().toISOString()
+    });
+
+    if(userDocId){
+      const prevPts    = userData.totalPoints   || 0;
+      const prevStreak = userData.currentStreak || 0;
+      const prevBest   = userData.bestStreak    || 0;
+      const lastVote   = userData.lastVoteDate  || "";
+      const yesterday  = new Date(); yesterday.setDate(yesterday.getDate()-1);
+      const yStr = yesterday.toISOString().split("T")[0];
+      const newStreak = (lastVote === yStr || lastVote === today) ? prevStreak+1 : 1;
+      const newPts    = prevPts + total;
+
+      await updateDoc(doc(db,"users",userDocId),{
+        totalPoints:   newPts,
+        currentStreak: newStreak,
+        bestStreak:    Math.max(prevBest, newStreak),
+        lastVoteDate:  today
+      });
+
+      document.getElementById("streakNum").textContent = newStreak;
+      document.getElementById("ptsNum").textContent    = newPts.toLocaleString();
+      document.getElementById("tierPill").textContent  = getTier(newPts).e+" "+getTier(newPts).n;
+      userData.totalPoints = newPts; userData.currentStreak = newStreak;
+    }
+
+    todayVoted = true;
+    showToast(`Vote submitted! 🎉 +${total} pts`);
+    document.getElementById("tasksCard").style.display   = "none";
+    document.getElementById("votedBanner").style.display = "flex";
+    const ico = document.getElementById("voteIco");
+    ico.className="vote-ico voted"; ico.textContent="🎉";
+    document.getElementById("voteTitle").textContent = "Voted Successfully!";
+    document.getElementById("voteDesc").textContent  = `+${total} pts earned today. Keep it up!`;
+
+  } catch(e){
+    console.error(e);
+    showToast("Error. Please try again.");
+    btn.disabled=false; btn.textContent="Submit Vote";
+  }
+};
+
+function showToast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"), 3200);
+}
+
+function escHtml(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 </script>
 </body>
 </html>
